@@ -11,18 +11,18 @@ class MainActivity : AppCompatActivity() {
     private var InTheaterFragment: InTheatersFragment? = null
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> {
-                supportActionBar?.setTitle(R.string.title_home)
+            R.id.navigation_intheater -> {
+                supportActionBar?.setTitle(R.string.toolbar_title_intheater)
                 if (InTheaterFragment == null) InTheaterFragment = InTheatersFragment()
                 addFragmentToActivity(supportFragmentManager, InTheaterFragment, R.id.container)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
-                supportActionBar?.setTitle(R.string.title_dashboard)
+            R.id.navigation_top250 -> {
+                supportActionBar?.setTitle(R.string.toolbar_title_top250)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
-                supportActionBar?.setTitle(R.string.title_notifications)
+            R.id.navigation_zhihu -> {
+                supportActionBar?.setTitle(R.string.toolbar_title_zhihu)
                 return@OnNavigationItemSelectedListener true
             }
         }

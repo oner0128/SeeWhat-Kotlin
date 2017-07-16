@@ -1,7 +1,5 @@
 package com.onerous.kotlin.seewhat.api;
 
-import android.app.Application;
-
 import com.onerous.kotlin.seewhat.App;
 
 import java.io.File;
@@ -66,7 +64,7 @@ public class ApiService {
             .cache(cache).build();
 
     private DouBanService mDouBanService;
-//    private ZhihuService mZhihuService;
+    //    private ZhihuService mZhihuService;
     private static Object syncobj = new Object();
 
     public DouBanService getDouBanService() {

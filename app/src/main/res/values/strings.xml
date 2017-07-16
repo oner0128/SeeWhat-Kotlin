@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">SeeWhat</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_main">正在热映</string>
+    <string name="title_intheater">inTheaters</string>
+    <string name="toolbar_title_intheater">正在热映</string>
+    <string name="title_top250">Top250</string>
+    <string name="toolbar_title_top250">Top250</string>
+    <string name="title_zhihu">Zhihu</string>
+    <string name="toolbar_title_zhihu">知乎日报</string>
 </resources>

@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 
 /**
- * Created by rrr on 2017/4/22.
+ * Created by rrr on 2017/7/15.
  */
 
 fun isInternetAvailable(context: Context): Boolean {
