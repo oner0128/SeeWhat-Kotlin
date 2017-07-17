@@ -3,18 +3,17 @@ package com.onerous.kotlin.seewhat
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import com.onerous.kotlin.seewhat.InTheaters.InTheatersFragment
+import com.onerous.kotlin.seewhat.inTheaters.InTheatersFragment
 import com.onerous.kotlin.seewhat.util.addFragmentToActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var InTheaterFragment: InTheatersFragment? = null
+    private val mInTheaterFragment: InTheatersFragment by lazy {InTheatersFragment()}
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_intheater -> {
                 supportActionBar?.setTitle(R.string.toolbar_title_intheater)
-                if (InTheaterFragment == null) InTheaterFragment = InTheatersFragment()
-                addFragmentToActivity(supportFragmentManager, InTheaterFragment, R.id.container)
+                addFragmentToActivity(supportFragmentManager, mInTheaterFragment, R.id.container)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_top250 -> {
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        if (InTheaterFragment == null) InTheaterFragment = InTheatersFragment()
-        addFragmentToActivity(supportFragmentManager, InTheaterFragment, R.id.container)
+
+        addFragmentToActivity(supportFragmentManager, mInTheaterFragment, R.id.container)
     }
 }

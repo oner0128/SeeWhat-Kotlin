@@ -8,7 +8,7 @@ import android.util.DisplayMetrics
 import android.view.Display
 import android.view.WindowManager
 object DensityUtil{
-val deviceWidthHeight = IntArray(2)
+private val deviceWidthHeight = IntArray(2)
 
 fun getDeviceInfo(context: Context): IntArray {
     if (deviceWidthHeight[0] == 0 && deviceWidthHeight[1] == 0) {

@@ -1,4 +1,4 @@
-package com.onerous.kotlin.seewhat.InTheaters
+package com.onerous.kotlin.seewhat.inTheaters
 
 
 import android.os.Bundle
@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.MoviesBean
-import com.onerous.kotlin.seewhat.data.Subjects
 import kotlinx.android.synthetic.main.fragment_in_theaters.*
 
 /**
@@ -22,7 +21,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         init()
     }
 
-    private var mDatas: ArrayList<Subjects> = ArrayList()
+    private var mDatas: ArrayList<MoviesBean.Subjects> = ArrayList()
     private lateinit var mAdapter: InTheatersAdapter
     private lateinit var mPresenter: InTheatersPresenter
 
@@ -32,6 +31,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         recyclerView.setLayoutManager(GridLayoutManager(context, 2))
         recyclerView.adapter = mAdapter
         mPresenter.getInTheatersMovies()
+        swipeRefreshLayout.setOnRefreshListener(mPresenter::getInTheatersMovies)
     }
 
     override fun showError(error: String?) {

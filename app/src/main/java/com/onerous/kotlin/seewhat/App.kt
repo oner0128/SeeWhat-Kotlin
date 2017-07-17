@@ -11,14 +11,14 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        app = this
+        instance = this
         imageSize = DensityUtil.getDeviceInfo(this)
         imageSize[0] /= 2;
         imageSize[1] = (imageSize[1] - DensityUtil.dip2px(this, 58 * 2.0f)) / 2;
     }
 
     companion object {
-        lateinit var app: App
+        lateinit var instance: App
         lateinit var imageSize: IntArray
     }
 }

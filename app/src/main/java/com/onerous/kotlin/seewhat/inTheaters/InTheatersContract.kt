@@ -1,8 +1,7 @@
-package com.onerous.kotlin.seewhat.InTheaters
+package com.onerous.kotlin.seewhat.inTheaters
 
 import com.onerous.kotlin.seewhat.BasePresenter
 import com.onerous.kotlin.seewhat.BaseView
-import com.onerous.kotlin.seewhat.api.DouBanService
 import com.onerous.kotlin.seewhat.data.MoviesBean
 
 /**

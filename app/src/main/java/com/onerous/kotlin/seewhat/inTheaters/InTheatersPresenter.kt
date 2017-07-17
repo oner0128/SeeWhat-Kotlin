@@ -1,10 +1,8 @@
-package com.onerous.kotlin.seewhat.InTheaters
+package com.onerous.kotlin.seewhat.inTheaters
 
 import com.onerous.kotlin.seewhat.api.ApiService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -22,13 +20,14 @@ class InTheatersPresenter(val fragment: InTheatersContract.View) : InTheatersCon
 
     override fun getInTheatersMovies() {
         fragment.showProgressDialog()
-        val disposable = ApiService.getINSTANCE().douBanService
+        val disposable = ApiService.douBanService
                 .getInTheatersMovies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it -> fragment.showMovies(it) },
                         { error -> fragment.showError(error.message) },
                         { fragment.hideProgressDialog() })
+
         CompositeDisposable().add(disposable)
     }
 }

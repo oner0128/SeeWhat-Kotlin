@@ -1,4 +1,4 @@
-package com.onerous.kotlin.seewhat.InTheaters
+package com.onerous.kotlin.seewhat.inTheaters
 
 import android.util.Log
 import android.view.View
@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.onerous.kotlin.seewhat.App
 import com.onerous.kotlin.seewhat.R
-import com.onerous.kotlin.seewhat.data.Subjects
+import com.onerous.kotlin.seewhat.data.MoviesBean.Subjects
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate
 import com.zhy.adapter.recyclerview.base.ViewHolder
 
@@ -22,7 +22,7 @@ class InTheaterItem : ItemViewDelegate<Subjects> {
         val mContext = holder.convertView.context
 
         val movieEntity = t
-        val imagePosterURL = movieEntity.images?.large
+        val imagePosterURL = movieEntity.images.large
         val title = movieEntity.title
         val id = movieEntity.id
         Glide.with(mContext)
