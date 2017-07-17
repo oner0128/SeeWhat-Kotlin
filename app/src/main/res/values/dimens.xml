@@ -4,4 +4,16 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="space_5">5dp</dimen>
     <dimen name="textSize_20">20sp</dimen>
+
+    <!-- cardview -->
+    <dimen name="item_card_height">146dp</dimen>
+    <dimen name="card_margin_horizontal">8dp</dimen>
+    <dimen name="card_margin_vertical">8dp</dimen>
+    <dimen name="image_margin_horizontal">8dp</dimen>
+    <dimen name="image_margin_vertical">8dp</dimen>
+    <dimen name="card_recycler_corner_radius">0dp</dimen>
+    <dimen name="card_recycler_elevation">1.5dp</dimen>
+    <dimen name="app_bar_movie_detail_height">310dp</dimen>
+    <dimen name="text_margin">8dp</dimen>
+    <dimen name="text_margin_vertical">4dp</dimen>
 </resources>
