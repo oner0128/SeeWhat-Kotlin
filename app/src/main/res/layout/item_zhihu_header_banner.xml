@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.bingoogolapple.bgabanner.BGABanner xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/banner_zhihu_header"
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    app:banner_pageChangeDuration="3000"
+    app:banner_pointAutoPlayInterval="3000"
+    app:banner_pointAutoPlayAble="true"
+    app:banner_pointTopBottomMargin="10dp"
+    app:banner_tipTextSize="20sp"
+    app:banner_indicatorGravity="right"
+    app:banner_transitionEffect="alpha"
+/>

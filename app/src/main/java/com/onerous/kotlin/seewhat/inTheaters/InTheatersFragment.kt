@@ -4,12 +4,12 @@ package com.onerous.kotlin.seewhat.inTheaters
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.MoviesBean
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_in_theaters.*
 
 /**
@@ -35,7 +35,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
     }
 
     override fun showError(error: String?) {
-        Log.e("intheater:", error)
+        Logger.d(error)
     }
 
     override fun showMovies(moviesBean: MoviesBean) {
@@ -46,9 +46,9 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         swipeRefreshLayout.setRefreshing(false)
     }
 
-    override fun setPresenter(presenter: InTheatersContract.Presenter) {
-//        mPresenter=presenter
-    }
+//    override fun setPresenter(presenter: InTheatersContract.Presenter) {
+////        mPresenter=presenter
+//    }
 
     override fun showProgressDialog() {
         swipeRefreshLayout.isRefreshing = true
