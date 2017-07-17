@@ -58,8 +58,8 @@ object ApiService {
     private val CACHE_SIZE = (20 * 1024 * 1024).toLong()//20MB
     private val cache = Cache(HTTPCACHEDIRECTORY, CACHE_SIZE)
     private val okHttpClient = OkHttpClient.Builder().cache(cache)
-            .addNetworkInterceptor(CACHE_CONTROL_INTERCEPTOP)
-            .addInterceptor(CACHE_CONTROL_INTERCEPTOP)
-            .writeTimeout(5, TimeUnit.SECONDS)
+//            .addNetworkInterceptor(CACHE_CONTROL_INTERCEPTOP)
+//            .addInterceptor(CACHE_CONTROL_INTERCEPTOP)
+//            .writeTimeout(5, TimeUnit.SECONDS)
             .build()
 }

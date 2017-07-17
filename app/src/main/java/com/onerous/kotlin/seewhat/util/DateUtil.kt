@@ -27,9 +27,9 @@ object DateUtil {
         return date
     }
 
-    fun formatStrDate(str: String,format: String = PATTERN): String {
-        val date = str2date(str,format)
-        return date2str(date,format)
+    fun formatStrDate(str: String, formatFrom: String, formatTo: String = PATTERN): String {
+        val date = str2date(str, formatFrom)
+        return date2str(date, formatTo)
     }
 
     fun getYesterday(dateStr: String): String {

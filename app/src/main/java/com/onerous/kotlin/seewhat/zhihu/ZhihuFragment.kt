@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.ZhihuLatestNewsBean
 import com.onerous.kotlin.seewhat.zhihu.item.ZhihuHeaderTitleItem
-import com.onerous.kotlin.seewhat.zhihu.item.ZhihuHeaderTitleItemDelegate
 import com.onerous.kotlin.seewhat.zhihu.item.ZhihuItem
 import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper
@@ -27,7 +26,7 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
     private var mPresenter: ZhihuPresenter = ZhihuPresenter(this)
     private var mDatas = ArrayList<ZhihuItem>()
     private var mAdapter: ZhihuAdapter? = null
-    private var mdate: String? = null
+    lateinit private var mdate: String
     lateinit private var mLoadMoreWrapper: LoadMoreWrapper<ZhihuItem>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,10 +52,7 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
 
         swipeRefreshLayout.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
         //swipe refresh
-        swipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
-            //refresh data
-            getLatestNews()
-        })
+        swipeRefreshLayout.setOnRefreshListener(this::getLatestNews)
         getLatestNews()
     }
 
@@ -65,29 +61,30 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
     }
 
     override fun showProgressDialog() {
-        swipeRefreshLayout.setRefreshing(true)
+        swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideProgressDialog() {
-        swipeRefreshLayout.setRefreshing(false)
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showError(error: String?) {
-        Logger.d(error)
+        Logger.e(error)
     }
 
     override fun showLastestNews(zhihuLatestNewsBean: ZhihuLatestNewsBean) {
         mDatas.clear()
-        mdate = zhihuLatestNewsBean.date.toString()
+        mdate = zhihuLatestNewsBean.date
         //banner top stories
+//        Logger.d(mdate)
         mDatas.add(zhihuLatestNewsBean)
         //date title
-        mDatas.add(ZhihuHeaderTitleItem(mdate!!))
+        mDatas.add(ZhihuHeaderTitleItem(mdate))
         //stories
-//        mDatas.addAll(zhihuLatestNewsBean.getStories())
+        mDatas.addAll(zhihuLatestNewsBean.stories)
         mAdapter?.notifyDataSetChanged()
         recyclerView.scrollToPosition(0)
-        swipeRefreshLayout.setRefreshing(false)
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

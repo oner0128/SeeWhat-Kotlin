@@ -5,7 +5,7 @@ import com.onerous.kotlin.seewhat.zhihu.item.ZhihuItem
 /**
  * Created by rrr on 2017/7/17.
  */
-data class ZhihuLatestNewsBean(var date: Int,
+data class ZhihuLatestNewsBean(var date: String,
                                var stories: List<Stories>,
                                var top_stories: List<TopStories>) : ZhihuItem {
     data class Stories(var type: Int,

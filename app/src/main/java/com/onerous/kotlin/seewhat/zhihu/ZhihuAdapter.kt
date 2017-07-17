@@ -4,6 +4,7 @@ import android.content.Context
 import com.onerous.kotlin.seewhat.zhihu.item.ZhihuHeaderBannerItemDelegate
 import com.onerous.kotlin.seewhat.zhihu.item.ZhihuHeaderTitleItemDelegate
 import com.onerous.kotlin.seewhat.zhihu.item.ZhihuItem
+import com.onerous.kotlin.seewhat.zhihu.item.ZhihuStoriesItemDelegate
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter
 
 /**
@@ -13,5 +14,6 @@ class ZhihuAdapter(context: Context?, datas: MutableList<ZhihuItem>?) : MultiIte
     init {
         addItemViewDelegate(ZhihuHeaderBannerItemDelegate())
         addItemViewDelegate(ZhihuHeaderTitleItemDelegate())
+        addItemViewDelegate(ZhihuStoriesItemDelegate())
     }
 }

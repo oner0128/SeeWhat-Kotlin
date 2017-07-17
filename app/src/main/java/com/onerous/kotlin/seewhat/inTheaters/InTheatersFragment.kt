@@ -35,7 +35,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
     }
 
     override fun showError(error: String?) {
-        Logger.d(error)
+        Logger.e(error)
     }
 
     override fun showMovies(moviesBean: MoviesBean) {
@@ -43,7 +43,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         mDatas.addAll(moviesBean.subjects)
         mAdapter.notifyDataSetChanged()
         recyclerView.scrollToPosition(0)
-        swipeRefreshLayout.setRefreshing(false)
+        swipeRefreshLayout.isRefreshing=false
     }
 
 //    override fun setPresenter(presenter: InTheatersContract.Presenter) {
