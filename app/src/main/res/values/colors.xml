@@ -9,4 +9,5 @@
     <color name="blue_primary_light">#03A9F4</color>
     <color name="blue_primary_dark">#1976D2</color>
     <color name="yellow_primary_dark">#FFA000</color>
+    <color name="colorLightGray">#E0E0E0</color>
 </resources>

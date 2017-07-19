@@ -2,6 +2,7 @@ package com.onerous.kotlin.seewhat.api
 
 import com.onerous.kotlin.seewhat.data.ZhihuBeforeNewsBean
 import com.onerous.kotlin.seewhat.data.ZhihuLatestNewsBean
+import com.onerous.kotlin.seewhat.data.ZhihuStoryDetailBean
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,6 +17,6 @@ interface ZhihuService {
     @GET("news/before/{date}")
     fun getZhihuBeforeNews(@Path("date") date: String): Observable<ZhihuBeforeNewsBean>
 
-//    @GET("news/{storyId}")
-//    fun getStoryContent(@Path("storyId") storyId: Int): Observable<ZhihuStoryContentBean>
+    @GET("news/{storyId}")
+    fun getStoryContent(@Path("storyId") storyId: Int): Observable<ZhihuStoryDetailBean>
 }

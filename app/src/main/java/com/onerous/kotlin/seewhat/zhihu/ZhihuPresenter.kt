@@ -8,15 +8,13 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by rrr on 2017/7/17.
  */
-class ZhihuPresenter(val fragment: ZhihuContract.View) :ZhihuContract.Presenter {
+class ZhihuPresenter(val fragment: ZhihuContract.View) : ZhihuContract.Presenter {
     override fun getZhihuBeforeNews(date: String) {
-        fragment.showProgressDialog()
-        val disposable=ApiService.zhiHuService.getZhihuBeforeNews(date)
+        val disposable = ApiService.zhiHuService.getZhihuBeforeNews(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it -> fragment.showBeforeNews(it) },
-                        { error -> fragment.showError(error.message) },
-                        { fragment.hideProgressDialog() })
+                        { error -> fragment.showError(error.message) })
         CompositeDisposable().add(disposable)
     }
 
@@ -30,7 +28,7 @@ class ZhihuPresenter(val fragment: ZhihuContract.View) :ZhihuContract.Presenter 
 
     override fun getZhihuLastestNews() {
         fragment.showProgressDialog()
-        val disposable=ApiService.zhiHuService.getZhihuLatestNews()
+        val disposable = ApiService.zhiHuService.getZhihuLatestNews()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it -> fragment.showLastestNews(it) },

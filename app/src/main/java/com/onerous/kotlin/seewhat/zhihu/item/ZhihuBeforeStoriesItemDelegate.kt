@@ -1,10 +1,13 @@
 package com.onerous.kotlin.seewhat.zhihu.item
 
+import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.ZhihuBeforeNewsBean
+import com.onerous.kotlin.seewhat.zhihu.ZhihuStoryDetailActivity
 import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate
 import com.zhy.adapter.recyclerview.base.ViewHolder
@@ -33,10 +36,13 @@ class ZhihuBeforeStoriesItemDelegate : ItemViewDelegate<ZhihuItem> {
         }
 
         holder.getConvertView().setOnClickListener(View.OnClickListener {
-            //            val intent = Intent(mContext, ZhihuStoryContentActivity::class.java)
-//            intent.putExtra("storyId", storiesEntity.getId())
-//            mContext.startActivity(intent)
             Logger.d(storiesEntity.title)
+            val intent = Intent(mContext, ZhihuStoryDetailActivity::class.java)
+            val bundle=Bundle()
+            bundle.putInt("storyId", storiesEntity.id)
+            bundle.putString("storyTitle", storiesEntity.title)
+            intent.putExtra("story",bundle)
+            mContext.startActivity(intent)
         })
     }
 
