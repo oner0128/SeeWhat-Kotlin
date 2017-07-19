@@ -7,4 +7,5 @@
     <string name="toolbar_title_top250">Top250</string>
     <string name="title_zhihu">Zhihu</string>
     <string name="toolbar_title_zhihu">知乎日报</string>
+    <string name="please_check_your_network">请检查您的网络</string>
 </resources>

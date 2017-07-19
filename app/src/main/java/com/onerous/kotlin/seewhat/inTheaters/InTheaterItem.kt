@@ -44,6 +44,6 @@ class InTheaterItem : ItemViewDelegate<Subjects> {
     }
 
     override fun getItemViewLayoutId(): Int {
-        return R.layout.item_recyclerview_image
+        return R.layout.item_recyclerview_intheaters
     }
 }

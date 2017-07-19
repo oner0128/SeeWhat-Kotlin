@@ -13,5 +13,5 @@ interface DouBanService {
     fun getInTheatersMovies():Observable<MoviesBean>
 
     @GET("top250")
-    abstract fun getTop250Movies(@Query("start") start: Int, @Query("count") count: Int): Observable<MoviesBean>
+    fun getTop250Movies(@Query("start") start: Int, @Query("count") count: Int): Observable<MoviesBean>
 }

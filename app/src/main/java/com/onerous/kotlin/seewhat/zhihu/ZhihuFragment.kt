@@ -19,9 +19,14 @@ import java.util.*
  * Created by rrr on 2017/7/17.
  */
 class ZhihuFragment : Fragment(), ZhihuContract.View {
-    //    override fun setPresenter(presenter: ZhihuContract.Presenter) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
+    private object SingletonHolder {
+        val Instance = ZhihuFragment()
+    }
+
+    companion object {
+        fun NewInstance(): ZhihuFragment = SingletonHolder.Instance
+    }
+
     private var mPresenter: ZhihuPresenter = ZhihuPresenter(this)
     private var mDatas = ArrayList<ZhihuItem>()
     private var mAdapter: ZhihuAdapter? = null

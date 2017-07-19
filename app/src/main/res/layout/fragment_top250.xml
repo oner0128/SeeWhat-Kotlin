@@ -13,6 +13,6 @@
         android:layout_height="match_parent"
         android:background="@color/activity_background"
         android:scrollbars="vertical"
-        tools:listitem="@layout/item_recyclerview_image"></android.support.v7.widget.RecyclerView>
+        tools:listitem="@layout/item_recyclerview_intheaters"></android.support.v7.widget.RecyclerView>
 </android.support.v4.widget.SwipeRefreshLayout>
 

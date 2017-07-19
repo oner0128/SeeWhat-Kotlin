@@ -2,6 +2,7 @@ package com.onerous.kotlin.seewhat.inTheaters
 
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -16,6 +17,14 @@ import kotlinx.android.synthetic.main.fragment_in_theaters.*
  * Created by rrr on 2017/7/15.
  */
 class InTheatersFragment : Fragment(), InTheatersContract.View {
+    private object SingletonHolder {
+        val Instance = InTheatersFragment()
+    }
+
+    companion object {
+        fun NewInstance(): InTheatersFragment = SingletonHolder.Instance
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
@@ -36,6 +45,13 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
 
     override fun showError(error: String?) {
         Logger.e(error)
+        if (recyclerView != null) {
+            Snackbar.make(recyclerView,
+                    getString(R.string.please_check_your_network),
+                    Snackbar.LENGTH_INDEFINITE).setAction("重试", {
+                mPresenter.getInTheatersMovies()
+            }).show()
+        }
     }
 
     override fun showMovies(moviesBean: MoviesBean) {
@@ -43,7 +59,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         mDatas.addAll(moviesBean.subjects)
         mAdapter.notifyDataSetChanged()
         recyclerView.scrollToPosition(0)
-        swipeRefreshLayout.isRefreshing=false
+        swipeRefreshLayout.isRefreshing = false
     }
 
 //    override fun setPresenter(presenter: InTheatersContract.Presenter) {

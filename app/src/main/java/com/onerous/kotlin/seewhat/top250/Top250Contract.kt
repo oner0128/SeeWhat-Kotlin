@@ -14,5 +14,6 @@ interface Top250Contract {
     }
     interface Presenter:BasePresenter{
         fun getTop250Movies(start:Int,count:Int)
+        fun getMoreTop250Movies(start:Int,count:Int)
     }
 }
