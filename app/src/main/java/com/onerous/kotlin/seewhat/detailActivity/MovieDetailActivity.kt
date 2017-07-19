@@ -81,7 +81,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private fun getMovieDetail() {
         if (id != null) {
             showProgressDialog()
-            val dis=ApiService.douBanService
+            val dis = ApiService.douBanService
                     .getMovieDetail(id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -122,7 +122,7 @@ class MovieDetailActivity : AppCompatActivity() {
         tv_header_countries.setText(formatListToString(movieDetailBean.countries))
 
         //content
-        ratingbar.setRating(movieDetailBean.rating.average.toFloat()/2)
+        ratingbar.setRating(movieDetailBean.rating.average.toFloat() / 2)
         //aka
         tv_title_aka.setText(formatListToString(movieDetailBean.aka))
         tv_summary.setText(movieDetailBean.summary)
@@ -173,9 +173,15 @@ class MovieDetailActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
-        if (id == R.id.action_moreInfo) {
-            showCustomTabs()
-            return true
+        when (id) {
+            R.id.action_moreInfo -> {
+                showCustomTabs()
+                true
+            }
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
         }
 
         return super.onOptionsItemSelected(item)
