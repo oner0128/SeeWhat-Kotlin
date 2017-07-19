@@ -1,10 +1,7 @@
 package com.onerous.kotlin.seewhat.zhihu
 
 import android.content.Context
-import com.onerous.kotlin.seewhat.zhihu.item.ZhihuHeaderBannerItemDelegate
-import com.onerous.kotlin.seewhat.zhihu.item.ZhihuHeaderTitleItemDelegate
-import com.onerous.kotlin.seewhat.zhihu.item.ZhihuItem
-import com.onerous.kotlin.seewhat.zhihu.item.ZhihuStoriesItemDelegate
+import com.onerous.kotlin.seewhat.zhihu.item.*
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter
 
 /**
@@ -15,5 +12,6 @@ class ZhihuAdapter(context: Context?, datas: MutableList<ZhihuItem>?) : MultiIte
         addItemViewDelegate(ZhihuHeaderBannerItemDelegate())
         addItemViewDelegate(ZhihuHeaderTitleItemDelegate())
         addItemViewDelegate(ZhihuStoriesItemDelegate())
+        addItemViewDelegate(ZhihuBeforeStoriesItemDelegate())
     }
 }

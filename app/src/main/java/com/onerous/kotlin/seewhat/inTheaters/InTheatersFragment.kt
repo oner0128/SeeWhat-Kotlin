@@ -40,6 +40,9 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         recyclerView.setLayoutManager(GridLayoutManager(context, 2))
         recyclerView.adapter = mAdapter
         mPresenter.getInTheatersMovies()
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
+
         swipeRefreshLayout.setOnRefreshListener(mPresenter::getInTheatersMovies)
     }
 

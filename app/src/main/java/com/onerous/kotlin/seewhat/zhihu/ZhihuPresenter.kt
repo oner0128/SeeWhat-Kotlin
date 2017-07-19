@@ -9,6 +9,17 @@ import io.reactivex.schedulers.Schedulers
  * Created by rrr on 2017/7/17.
  */
 class ZhihuPresenter(val fragment: ZhihuContract.View) :ZhihuContract.Presenter {
+    override fun getZhihuBeforeNews(date: String) {
+        fragment.showProgressDialog()
+        val disposable=ApiService.zhiHuService.getZhihuBeforeNews(date)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ it -> fragment.showBeforeNews(it) },
+                        { error -> fragment.showError(error.message) },
+                        { fragment.hideProgressDialog() })
+        CompositeDisposable().add(disposable)
+    }
+
     override fun subscribe() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
