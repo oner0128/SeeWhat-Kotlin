@@ -7,7 +7,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.ZhihuBeforeNewsBean
-import com.onerous.kotlin.seewhat.zhihu.ZhihuStoryDetailActivity
+import com.onerous.kotlin.seewhat.detailActivity.ZhihuStoryDetailActivity
 import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate
 import com.zhy.adapter.recyclerview.base.ViewHolder

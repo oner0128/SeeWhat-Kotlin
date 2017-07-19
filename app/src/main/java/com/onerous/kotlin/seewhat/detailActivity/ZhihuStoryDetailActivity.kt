@@ -1,4 +1,4 @@
-package com.onerous.kotlin.seewhat.zhihu
+package com.onerous.kotlin.seewhat.detailActivity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

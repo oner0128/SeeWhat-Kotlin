@@ -1,5 +1,6 @@
 package com.onerous.kotlin.seewhat.inTheaters
 
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
@@ -7,6 +8,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.onerous.kotlin.seewhat.App
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.MoviesBean.Subjects
+import com.onerous.kotlin.seewhat.detailActivity.MovieDetailActivity
 import com.onerous.kotlin.seewhat.util.formatCastsToString
 import com.onerous.kotlin.seewhat.util.formatListToString
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate
@@ -47,13 +49,14 @@ class Top250ItemDelegate : ItemViewDelegate<Subjects> {
         holder.setText(R.id.tv_years,"年份:" + movieEntity.year)
 
         holder.setText(R.id.tv_genres,"类型:" + formatListToString(movieEntity.genres))
-        holder.convertView.setOnClickListener(View.OnClickListener {
-            //            val intent = Intent(mContext, MovieDetailActivity::class.java)
-//            intent.putExtra("MovieID", id)
-//            intent.putExtra("MovieTitle", title)
-//            intent.putExtra("MovieImg", imagePosterURL)
-//            mContext.startActivity(intent)
+
+        holder.convertView.setOnClickListener({
             Log.d("movieTitle:", title)
+            val intent = Intent(mContext, MovieDetailActivity::class.java)
+            intent.putExtra("MovieId", id)
+            intent.putExtra("MovieTitle", title)
+            intent.putExtra("MovieImg", imagePosterURL)
+            mContext.startActivity(intent)
         })
     }
 

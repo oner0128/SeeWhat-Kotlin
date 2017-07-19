@@ -9,6 +9,6 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter
  */
 class InTheatersAdapter(context: Context, datas: ArrayList<MoviesBean.Subjects>) : MultiItemTypeAdapter<MoviesBean.Subjects>(context, datas) {
     init {
-        addItemViewDelegate(InTheaterItem())
+        addItemViewDelegate(InTheaterItemDelegate())
     }
 }

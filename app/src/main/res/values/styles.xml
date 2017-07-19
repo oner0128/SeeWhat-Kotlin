@@ -16,4 +16,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="MyRatingBar" parent="@android:style/Widget.DeviceDefault.RatingBar"></style>
 </resources>

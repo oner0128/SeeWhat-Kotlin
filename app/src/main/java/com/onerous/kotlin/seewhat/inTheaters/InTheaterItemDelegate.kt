@@ -1,19 +1,20 @@
 package com.onerous.kotlin.seewhat.inTheaters
 
-import android.util.Log
-import android.view.View
+import android.content.Intent
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.onerous.kotlin.seewhat.App
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.MoviesBean.Subjects
+import com.onerous.kotlin.seewhat.detailActivity.MovieDetailActivity
+import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate
 import com.zhy.adapter.recyclerview.base.ViewHolder
 
 /**
  * Created by rrr on 2017/7/15.
  */
-class InTheaterItem : ItemViewDelegate<Subjects> {
+class InTheaterItemDelegate : ItemViewDelegate<Subjects> {
     override fun isForViewType(item: Subjects?, position: Int): Boolean {
         return item is Subjects
     }
@@ -33,13 +34,13 @@ class InTheaterItem : ItemViewDelegate<Subjects> {
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .centerCrop()
                 .into(holder.getView(R.id.imageView))
-        holder.convertView.setOnClickListener(View.OnClickListener {
-            //            val intent = Intent(mContext, MovieDetailActivity::class.java)
-//            intent.putExtra("MovieID", id)
-//            intent.putExtra("MovieTitle", title)
-//            intent.putExtra("MovieImg", imagePosterURL)
-//            mContext.startActivity(intent)
-            Log.d("movieTitle:", title)
+        holder.convertView.setOnClickListener({
+            Logger.v("movieTitle:", title)
+            val intent = Intent(mContext, MovieDetailActivity::class.java)
+            intent.putExtra("MovieId", id)
+            intent.putExtra("MovieTitle", title)
+            intent.putExtra("MovieImg", imagePosterURL)
+            mContext.startActivity(intent)
         })
     }
 

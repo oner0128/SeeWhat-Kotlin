@@ -22,4 +22,6 @@
     <dimen name="space_15">15dp</dimen>
     <dimen name="textSize_22">22sp</dimen>
     <dimen name="textSize_12">12sp</dimen>
+    <dimen name="movie_detail_width">150dp</dimen>
+    <dimen name="movie_detail_height">210dp</dimen>
 </resources>
