@@ -5,10 +5,9 @@
     android:id="@+id/cardv_item_person"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
+    android:layout_marginTop="4dp"
     android:background="@color/white"
-    android:foreground="?attr/selectableItemBackground"
-    card_view:cardElevation="@dimen/card_recycler_elevation">
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"

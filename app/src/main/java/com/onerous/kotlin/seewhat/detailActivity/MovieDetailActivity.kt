@@ -1,5 +1,6 @@
 package com.onerous.kotlin.seewhat.detailActivity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -175,7 +176,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
         when (id) {
             R.id.action_moreInfo -> {
-                showCustomTabs()
+                showCustomTabs(MovieUrl,this)
                 true
             }
             android.R.id.home -> {
@@ -188,10 +189,10 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private lateinit var MovieUrl: String
-    private fun showCustomTabs() {
-        if (MovieUrl == null) return
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        customTabsIntent.launchUrl(this, Uri.parse(MovieUrl))
-    }
+}
+fun showCustomTabs(url:String?,context: Context) {
+    if (url == null) return
+    val builder = CustomTabsIntent.Builder()
+    val customTabsIntent = builder.build()
+    customTabsIntent.launchUrl(context, Uri.parse(url))
 }

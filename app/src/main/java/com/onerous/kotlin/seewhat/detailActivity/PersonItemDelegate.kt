@@ -1,12 +1,10 @@
 package com.onerous.kotlin.seewhat.detailActivity
 
-import android.content.Context
-import android.widget.ImageView
-
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.PersonBean
+import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate
 import com.zhy.adapter.recyclerview.base.ViewHolder
 
@@ -31,6 +29,9 @@ class PersonItemDelegate : ItemViewDelegate<PersonBean> {
 
         viewHolder.setText(R.id.tv_name, personBean.getPersonName())
         viewHolder.setText(R.id.tv_job, personBean.getJob())
-
+        viewHolder.convertView.setOnClickListener( {
+            Logger.v(personBean.getPersonName())
+            showCustomTabs("https://movie.douban.com/celebrity/${personBean.getPersonId()}/mobile", mContext)
+        })
     }
 }

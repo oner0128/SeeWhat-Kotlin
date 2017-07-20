@@ -49,9 +49,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
-//    //sqlbrite2
-//    implementation "com.squareup.sqlbrite2:sqlbrite:$rootProject.sqlbriteVersion"
-//    implementation "com.squareup.sqlbrite2:sqlbrite-kotlin:$rootProject.sqlbritekotlinVersion"
+    //sqlbrite2
+    implementation "com.squareup.sqlbrite2:sqlbrite:$rootProject.sqlbriteVersion"
+    implementation "com.squareup.sqlbrite2:sqlbrite-kotlin:$rootProject.sqlbritekotlinVersion"
     //Glide
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     implementation 'jp.wasabeef:glide-transformations:2.0.1'

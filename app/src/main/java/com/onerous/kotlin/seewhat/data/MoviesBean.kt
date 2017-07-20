@@ -4,10 +4,10 @@ package com.onerous.kotlin.seewhat.data
  * Created by rrr on 2017/7/17.
  */
 data class MoviesBean(var count: Int,
-                        var start: Int,
-                        var total: Int,
-                        var title: String,
-                        var subjects: List<Subjects>) {
+                      var start: Int,
+                      var total: Int,
+                      var title: String,
+                      var subjects: List<Subjects>) {
     data class Subjects(var rating: Rating,
                         var title: String,
                         var collect_count: Int,
@@ -19,7 +19,7 @@ data class MoviesBean(var count: Int,
                         var id: String,
                         var genres: List<String>,
                         var casts: List<Casts>,
-                        var directors: List<Directors>) {
+                        var directors: List<Directors>) : MovieItem {
         data class Rating(var max: Int,
                           var average: Double,
                           var stars: String,
@@ -32,12 +32,14 @@ data class MoviesBean(var count: Int,
         data class Casts(var alt: String,
                          var avatars: Avatars,
                          var name: String,
-                         var id: String) :PersonBean{
-            override fun getPersonName(): String =name
+                         var id: String) : PersonBean {
+            override fun getPersonId(): String =id
 
-            override fun getJob(): String =javaClass.simpleName
+            override fun getPersonName(): String = name
 
-            override fun getImgUrl(): String =avatars.medium
+            override fun getJob(): String = javaClass.simpleName
+
+            override fun getImgUrl(): String = avatars.medium
 
             data class Avatars(var small: String,
                                var large: String,
@@ -47,12 +49,14 @@ data class MoviesBean(var count: Int,
         data class Directors(var alt: String,
                              var avatars: Avatars,
                              var name: String,
-                             var id: String) :PersonBean{
-            override fun getPersonName(): String =name
+                             var id: String) : PersonBean {
+            override fun getPersonId(): String =id
 
-            override fun getJob(): String =javaClass.simpleName
+            override fun getPersonName(): String = name
 
-            override fun getImgUrl(): String =avatars.medium
+            override fun getJob(): String = javaClass.simpleName
+
+            override fun getImgUrl(): String = avatars.medium
 
             data class Avatars(var small: String,
                                var large: String,
@@ -60,3 +64,15 @@ data class MoviesBean(var count: Int,
         }
     }
 }
+
+data class MovieData(var rating: Double=0.0,
+                     var title: String="null",
+                     var year: String="",
+                     var images_medium: String="",
+                     var images_large: String="",
+                     var id: String="",
+                     var genres: String="",
+                     var casts: String="",
+                     var directors: String="") : MovieItem
+
+interface MovieItem

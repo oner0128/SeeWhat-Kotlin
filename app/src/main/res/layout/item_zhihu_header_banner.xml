@@ -4,6 +4,7 @@
     android:id="@+id/banner_zhihu_header"
     android:layout_width="match_parent"
     android:layout_height="230dp"
+    android:layout_marginBottom="4dp"
     app:banner_pageChangeDuration="3000"
     app:banner_pointAutoPlayInterval="3000"
     app:banner_pointAutoPlayAble="true"

@@ -42,12 +42,14 @@ data class MovieDetailBean(var rating: Rating,
     data class Casts(var alt: String,
                      var avatars: Avatars,
                      var name: String,
-                     var id: String) :PersonBean{
-        override fun getPersonName(): String =name
+                     var id: String) : PersonBean {
+        override fun getPersonId(): String = id
 
-        override fun getJob(): String =javaClass.simpleName
+        override fun getPersonName(): String = name
 
-        override fun getImgUrl(): String =avatars.medium
+        override fun getJob(): String = javaClass.simpleName
+
+        override fun getImgUrl(): String = avatars.medium
 
         data class Avatars(var small: String,
                            var large: String,
@@ -57,12 +59,14 @@ data class MovieDetailBean(var rating: Rating,
     data class Directors(var alt: String,
                          var avatars: Avatars,
                          var name: String,
-                         var id: String) :PersonBean{
-        override fun getPersonName(): String =name
+                         var id: String) : PersonBean {
+        override fun getPersonId(): String = id
 
-        override fun getJob(): String =javaClass.simpleName
+        override fun getPersonName(): String = name
 
-        override fun getImgUrl(): String =avatars.medium
+        override fun getJob(): String = javaClass.simpleName
+
+        override fun getImgUrl(): String = avatars.medium
 
         data class Avatars(var small: String,
                            var large: String,

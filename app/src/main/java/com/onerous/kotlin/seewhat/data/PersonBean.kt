@@ -6,5 +6,6 @@ package com.onerous.kotlin.seewhat.data
 interface PersonBean {
     fun getPersonName():String
     fun getJob():String
+    fun getPersonId():String
     fun getImgUrl():String
 }
