@@ -1,10 +1,13 @@
 package com.onerous.kotlin.seewhat.zhihu.item
 
+import android.content.Intent
+import android.os.Bundle
 import android.widget.ImageView
 import cn.bingoogolapple.bgabanner.BGABanner
 import com.bumptech.glide.Glide
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.ZhihuLatestNewsBean
+import com.onerous.kotlin.seewhat.detailActivity.ZhihuStoryDetailActivity
 import com.orhanobut.logger.Logger
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate
 import com.zhy.adapter.recyclerview.base.ViewHolder
@@ -32,9 +35,17 @@ class ZhihuHeaderBannerItemDelegate : ItemViewDelegate<ZhihuItem> {
                     .dontAnimate()
                     .into(itemView)
         })
-        banner.setDelegate(BGABanner.Delegate<ImageView, String> {
+        banner.setDelegate({
             banner, itemView, model, position ->
-            Logger.d(topStories.get(position).title) })
+            Logger.d(topStories.get(position).title)
+            val intent = Intent(mContext, ZhihuStoryDetailActivity::class.java)
+            val bundle= Bundle()
+            bundle.putInt("storyId", topStories.get(position).id)
+            bundle.putString("storyTitle", topStories.get(position).title)
+            intent.putExtra("story",bundle)
+            mContext.startActivity(intent)}
+        )
+
         banner.setData(images, titles)
     }
 

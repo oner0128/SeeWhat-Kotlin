@@ -19,15 +19,10 @@ class InTheaterItemDelegate : ItemViewDelegate<Subjects> {
         return item is Subjects
     }
 
-    override fun convert(holder: ViewHolder, t: Subjects, position: Int) {
+    override fun convert(holder: ViewHolder, movieEntity: Subjects, position: Int) {
         val mContext = holder.convertView.context
-
-        val movieEntity = t
-        val imagePosterURL = movieEntity.images.large
-        val title = movieEntity.title
-        val id = movieEntity.id
         Glide.with(mContext)
-                .load(imagePosterURL)
+                .load(movieEntity.images.large)
                 .placeholder(R.mipmap.ic_launcher)
                 //                .error(R.mipmap.ic_launcher_round)
                 .override(App.imageSize[0], App.imageSize[1])
@@ -35,11 +30,11 @@ class InTheaterItemDelegate : ItemViewDelegate<Subjects> {
                 .centerCrop()
                 .into(holder.getView(R.id.imageView))
         holder.convertView.setOnClickListener({
-            Logger.v("movieTitle:", title)
+            Logger.v("movieTitle:", movieEntity.images.large)
             val intent = Intent(mContext, MovieDetailActivity::class.java)
-            intent.putExtra("MovieId", id)
-            intent.putExtra("MovieTitle", title)
-            intent.putExtra("MovieImg", imagePosterURL)
+            intent.putExtra("MovieId", movieEntity.id)
+            intent.putExtra("MovieTitle", movieEntity.title)
+            intent.putExtra("MovieImg", movieEntity.images.large)
             mContext.startActivity(intent)
         })
     }
