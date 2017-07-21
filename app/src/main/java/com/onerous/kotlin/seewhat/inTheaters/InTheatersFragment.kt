@@ -12,6 +12,7 @@ import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.MoviesBean
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_in_theaters.*
+import kotlinx.android.synthetic.main.fragment_in_theaters.view.*
 
 /**
  * Created by rrr on 2017/7/15.
@@ -57,6 +58,14 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         }
     }
 
+    override fun setLoadingIndicator(active: Boolean) {
+        if (view == null) {
+            return
+        }
+        val srl = view!!.swipeRefreshLayout
+        // Make sure setRefreshing() is called after the layout is done with everything else.
+        srl.post({ srl.setRefreshing(active) })
+    }
     override fun showMovies(moviesBean: MoviesBean) {
         mDatas.clear()
         mDatas.addAll(moviesBean.subjects)

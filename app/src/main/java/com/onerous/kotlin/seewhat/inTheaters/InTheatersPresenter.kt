@@ -1,6 +1,7 @@
 package com.onerous.kotlin.seewhat.inTheaters
 
 import com.onerous.kotlin.seewhat.api.ApiService
+import com.onerous.kotlin.seewhat.data.source.MoviesRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -10,12 +11,16 @@ import io.reactivex.schedulers.Schedulers
  */
 class InTheatersPresenter(val fragment: InTheatersContract.View) : InTheatersContract.Presenter {
 
+    val mMoviesRepository=MoviesRepository
+    var mFirstLoad = true
+    private val mSubscriptions=CompositeDisposable()
+
     override fun subscribe() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        getInTheatersMovies(false)
     }
 
     override fun unsubscribe() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mSubscriptions.clear()
     }
 
     override fun getInTheatersMovies() {
@@ -27,7 +32,24 @@ class InTheatersPresenter(val fragment: InTheatersContract.View) : InTheatersCon
                 .subscribe({ it -> fragment.showMovies(it) },
                         { error -> fragment.showError(error.message) },
                         { fragment.hideProgressDialog() })
+        mSubscriptions.add(disposable)
+    }
+    override fun getInTheatersMovies(forceUpdate: Boolean) {
+        getInTheatersMovies(forceUpdate || mFirstLoad, true)
+        mFirstLoad = false
+    }
 
-        CompositeDisposable().add(disposable)
+    private fun getInTheatersMovies(forceUpdate: Boolean, showLoadingUI: Boolean) {
+        if (showLoadingUI) {
+            fragment.setLoadingIndicator(true)
+        }
+        if (forceUpdate) {
+            mMoviesRepository.refreshMovies()
+        }
+
+        mSubscriptions.clear()
+//        val subscription = mMoviesRepository
+//
+//        mSubscriptions.add(subscription)
     }
 }

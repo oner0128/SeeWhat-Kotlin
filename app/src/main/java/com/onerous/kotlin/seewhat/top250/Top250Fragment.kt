@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_top250.*
  * Created by rrr on 2017/7/15.
  */
 class Top250Fragment : Fragment(), Top250Contract.View {
-    //kotlin中的单例写法，类似Java中的静态内部类
+
     private object SingletonHolder {
         val Instance = Top250Fragment()
     }
@@ -32,7 +32,7 @@ class Top250Fragment : Fragment(), Top250Contract.View {
     private var isFirstLoad = true
     private var isLoading = false
     private var start = 0
-    private var count = 20
+    private var count = 15
     private var total = 0
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,7 +87,7 @@ class Top250Fragment : Fragment(), Top250Contract.View {
         isFirstLoad = false
         isLoading=true
         start = 0
-        count = 30
+        count = 15
         total = 0
         mPresenter.getTop250Movies(start, count)
     }

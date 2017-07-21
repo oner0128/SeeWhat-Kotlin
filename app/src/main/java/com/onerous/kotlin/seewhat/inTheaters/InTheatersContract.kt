@@ -10,8 +10,10 @@ import com.onerous.kotlin.seewhat.data.MoviesBean
 interface InTheatersContract {
     interface View:BaseView<Presenter>{
         fun showMovies(moviesBean: MoviesBean)
+        fun setLoadingIndicator(active: Boolean)
     }
     interface Presenter:BasePresenter{
         fun getInTheatersMovies()
+        fun getInTheatersMovies(forceUpdate:Boolean)
     }
 }
