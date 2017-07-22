@@ -1,10 +1,9 @@
 package com.onerous.kotlin.seewhat.data.source.local
 
 import android.content.ContentValues
-import android.content.Context
 import android.database.Cursor
 import android.text.TextUtils
-import com.onerous.kotlin.seewhat.data.MovieData
+import com.onerous.kotlin.seewhat.App
 import com.onerous.kotlin.seewhat.data.MoviesBean
 import com.onerous.kotlin.seewhat.data.source.MoviesDataSource
 import com.onerous.kotlin.seewhat.util.formatCastsToString
@@ -17,106 +16,204 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by rrr on 2017/7/20.
  */
-class MoviesLocalDataSource private constructor(val context: Context) : MoviesDataSource {
+object MoviesLocalDataSource {
 
-
-    companion object {
-        var Instance: MoviesLocalDataSource? = null
-        fun NewInstance(context: Context): MoviesLocalDataSource {
-            if (Instance == null) Instance = MoviesLocalDataSource(context)
-            return Instance!!
-        }
-    }
-
-    val movieDBHelper = MoviesDBHelper(context)
+    val movieDBHelper = MoviesDBHelper(App.instance)
     val sqlBrite = SqlBrite.Builder().build()
     val db = sqlBrite.wrapDatabaseHelper(movieDBHelper, Schedulers.io());
-    val mMovieMapperFunction = Function<Cursor, MovieData> { it -> getMovie(it) }
+    val mMovieMapperFunction = Function<Cursor, MoviesBean.Subjects> { it -> getMovie(it) }
+
+    //    object RemoteTop250 : MoviesDataSource.RemoteTop250 {
+//        override fun getMovies(start: Int, count: Int): Observable<List<com.onerous.kotlin.seewhat.data.MoviesBean.Subjects>> {
+//            return ApiService.douBanService
+//                    .getTop250Movies(start,count)
+//                    .subscribeOn(Schedulers.io())
+//                    .map { it -> it.subjects }
+//                    .map { it ->
+//                        val gson = Gson()
+//                        gson.fromJson(gson.toJson(it), com.onerous.kotlin.seewhat.data.MoviesBean.Subjects::class.java)
+//                    }
+//                    .toList().toObservable()
+//        }
+//    }
+    object LocalInTheaters : MoviesDataSource.LocalInTheaters {
+
+        val tableName: String = MoviesPersistenceContract.InTheatersEntity.TABLE_NAME
+
+        override fun getMovies(): Observable<List<MoviesBean.Subjects>> {
+            return getMovies(tableName)
+        }
+
+        override fun getMovie(movieId: String): Observable<MoviesBean.Subjects> {
+            return getMovie(tableName, movieId)
+        }
+
+        override fun saveMovies(movies: List<MoviesBean.Subjects>) {
+            return saveMovies(tableName, movies)
+        }
+
+        override fun saveMovie(movie: MoviesBean.Subjects) {
+            return saveMovie(tableName, movie)
+        }
+
+        override fun refreshMovies() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun deleteAllMovies() {
+            deleteAllMovies(MoviesPersistenceContract.InTheatersEntity.TABLE_NAME)
+        }
+
+        override fun deleteMovie(movieId: String) {
+            deleteMovie(tableName, movieId)
+        }
 
 
-    private fun getMovie(cursor: Cursor): MovieData {
-        val id = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_MOVIE_ID))
-        val title = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_TITLE))
-        val directors = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_NAME_DIRECTORS))
-        val casts = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_NAME_CASTS))
-        val years = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_YEARS))
-        val rating = cursor.getDouble(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_RATING))
-        val genres = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_GENRES))
-        val imgUrl_large = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_LARGE))
-        val imgUrl_medium = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_MEDIUM))
-        return MovieData(rating, title, years, imgUrl_medium, imgUrl_large, id, genres, casts, directors)
     }
 
-    override fun getMovies(): Observable<List<MovieData>> {
-        val projection: Array<String> = arrayOf(MoviesPersistenceContract.MovieEntity._ID
-                , MoviesPersistenceContract.MovieEntity.COLUMN_TITLE
-                , MoviesPersistenceContract.MovieEntity.COLUMN_RATING
-                , MoviesPersistenceContract.MovieEntity.COLUMN_GENRES
-                , MoviesPersistenceContract.MovieEntity.COLUMN_NAME_DIRECTORS
-                , MoviesPersistenceContract.MovieEntity.COLUMN_NAME_CASTS
-                , MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_MEDIUM)
+    object LocalTop250 : MoviesDataSource.LocalTop250 {
+        val tableName: String = MoviesPersistenceContract.Top250Entity.TABLE_NAME
+
+        override fun getMovies(start: Int, count: Int): Observable<List<MoviesBean.Subjects>> {
+            val projection: Array<String> = arrayOf(MoviesPersistenceContract.Top250Entity._ID
+                    , MoviesPersistenceContract.Top250Entity.COLUMN_TITLE
+                    , MoviesPersistenceContract.Top250Entity.COLUMN_RATING
+                    , MoviesPersistenceContract.Top250Entity.COLUMN_GENRES
+                    , MoviesPersistenceContract.Top250Entity.COLUMN_NAME_DIRECTORS
+                    , MoviesPersistenceContract.Top250Entity.COLUMN_NAME_CASTS
+                    , MoviesPersistenceContract.Top250Entity.COLUMN_IMAGE_URL_LARGE)
+
+            val sql: String = String.format("SELECT %s FROM %s WHERE %s BEWTEEN %s AND %s"
+                    , TextUtils.join(",", projection)
+                    , tableName
+                    , MoviesPersistenceContract.Top250Entity._ID
+                    , start, count)
+
+            return db.createQuery(tableName, sql)
+                    .mapToList(mMovieMapperFunction)
+        }
+
+        override fun getMovie(movieId: String): Observable<MoviesBean.Subjects> {
+            return getMovie(tableName, movieId)
+        }
+
+        override fun saveMovies(movies: List<MoviesBean.Subjects>) {
+            return saveMovies(tableName, movies)
+        }
+
+        override fun saveMovie(movie: MoviesBean.Subjects) {
+            return saveMovie(tableName, movie)
+        }
+
+        override fun refreshMovies() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun deleteAllMovies() {
+            deleteAllMovies(MoviesPersistenceContract.Top250Entity.TABLE_NAME)
+        }
+
+        override fun deleteMovie(movieId: String) {
+            deleteMovie(tableName, movieId)
+        }
+
+
+    }
+
+    private fun getMovie(cursor: Cursor): MoviesBean.Subjects {
+        val id = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID))
+        val title = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE))
+
+        val years = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_YEARS))
+        val rating = cursor.getDouble(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING))
+        val imgUrl_large = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE))
+        val imgUrl_medium = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_MEDIUM))
+        val genres = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES))
+                .split("/")
+        val casts = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS))
+                .split("/").map { it -> MoviesBean.Subjects.Casts(name = it) }.toList()
+        val directors = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS))
+                .split("/").map { it -> MoviesBean.Subjects.Directors(name = it) }.toList()
+        return MoviesBean.Subjects(
+                rating = MoviesBean.Subjects.Rating(average = rating)
+                , title = title
+                , images = MoviesBean.Subjects.Images(medium = imgUrl_medium, large = imgUrl_large)
+                , year = years, id = id
+                , genres = genres, casts = casts, directors = directors)
+    }
+
+    fun getMovies(tableName: String): Observable<List<MoviesBean.Subjects>> {
+        val projection: Array<String> = arrayOf(MoviesPersistenceContract.InTheatersEntity._ID
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE)
 
         val sql: String = String.format("SELECT %s FROM %s ",
                 TextUtils.join(",", projection),
-                MoviesPersistenceContract.MovieEntity.TABLE_NAME)
+                tableName)
 
-        return db.createQuery(MoviesPersistenceContract.MovieEntity.TABLE_NAME, sql)
+        return db.createQuery(tableName, sql)
                 .mapToList(mMovieMapperFunction)
     }
 
-    override fun getMovie(movieId: String): Observable<MovieData> {
-        val projection: Array<String> = arrayOf(MoviesPersistenceContract.MovieEntity._ID
-                , MoviesPersistenceContract.MovieEntity.COLUMN_TITLE
-                , MoviesPersistenceContract.MovieEntity.COLUMN_RATING
-                , MoviesPersistenceContract.MovieEntity.COLUMN_GENRES
-                , MoviesPersistenceContract.MovieEntity.COLUMN_NAME_DIRECTORS
-                , MoviesPersistenceContract.MovieEntity.COLUMN_NAME_CASTS
-                , MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_MEDIUM)
+    fun getMovie(tableName: String, movieId: String): Observable<MoviesBean.Subjects> {
+        val projection: Array<String> = arrayOf(MoviesPersistenceContract.InTheatersEntity._ID
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS
+                , MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_MEDIUM)
 
         val sql: String = String.format("SELECT %s FROM %s  WHERE %s LIKE ? ",
                 TextUtils.join(",", projection),
-                MoviesPersistenceContract.MovieEntity.TABLE_NAME, MoviesPersistenceContract.MovieEntity.COLUMN_MOVIE_ID)
-        return db.createQuery(MoviesPersistenceContract.MovieEntity.TABLE_NAME, sql, movieId)
-                .mapToOneOrDefault(mMovieMapperFunction, MovieData())
+                tableName, MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID)
+        return db.createQuery(tableName, sql, movieId)
+                .mapToOne(mMovieMapperFunction)
     }
 
-    override fun saveMovies(moviesBean: MoviesBean) {
-        moviesBean.subjects.forEach { it ->
+    fun saveMovies(tableName: String, movies: List<MoviesBean.Subjects>) {
+        movies.forEach { movie ->
             val contentValues = ContentValues()
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_TITLE, it.title)
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_MOVIE_ID, it.id)
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_LARGE, it.images.large)
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_MEDIUM, it.images.medium)
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_YEARS, it.year)
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_NAME_CASTS, formatCastsToString(it.casts))
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_NAME_DIRECTORS, formatCastsToString(it.directors))
-            contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_GENRES, formatListToString(it.genres))
-            db.insert(MoviesPersistenceContract.MovieEntity.TABLE_NAME, contentValues)
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_TITLE, movie.title)
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_MOVIE_ID, movie.id)
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_IMAGE_URL_LARGE, movie.images.large)
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_IMAGE_URL_MEDIUM, movie.images.medium)
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_YEARS, movie.year)
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_NAME_CASTS, movie.casts.toString())
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_NAME_DIRECTORS, formatCastsToString(movie.directors))
+            contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_GENRES, formatListToString(movie.genres))
+            db.insert(tableName, contentValues)
         }
     }
 
-    override fun saveMovie(movieData: MovieData) {
+    fun saveMovie(tableName: String, movie: MoviesBean.Subjects) {
         val contentValues = ContentValues()
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_TITLE, movieData.title)
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_MOVIE_ID, movieData.id)
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_LARGE, movieData.images_large)
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_MEDIUM, movieData.images_medium)
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_YEARS, movieData.year)
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_NAME_CASTS, movieData.casts)
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_NAME_DIRECTORS, movieData.directors)
-        contentValues.put(MoviesPersistenceContract.MovieEntity.COLUMN_GENRES, movieData.genres)
-        db.insert(MoviesPersistenceContract.MovieEntity.TABLE_NAME, contentValues)
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_TITLE, movie.title)
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_MOVIE_ID, movie.id)
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_IMAGE_URL_LARGE, movie.images.large)
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_IMAGE_URL_MEDIUM, movie.images.medium)
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_YEARS, movie.year)
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_NAME_CASTS, movie.casts.toString())
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_NAME_DIRECTORS, formatCastsToString(movie.directors))
+        contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_GENRES, formatListToString(movie.genres))
+        db.insert(tableName, contentValues)
     }
 
-    override fun refreshMovies() {
+    fun refreshMovies() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun deleteAllMovies() {
-        db.delete(MoviesPersistenceContract.MovieEntity.TABLE_NAME, null)
+    fun deleteAllMovies(tableName: String) {
+//        db.delete(MoviesPersistenceContract.InTheatersEntity.TABLE_NAME, null)
+        db.delete(tableName, null)
     }
 
-    override fun deleteMovie(movieId: String) {
-        db.delete(MoviesPersistenceContract.MovieEntity.TABLE_NAME, "${MoviesPersistenceContract.MovieEntity.COLUMN_MOVIE_ID} LIKE ?", movieId)
+    fun deleteMovie(tableName: String, movieId: String) {
+//        db.delete(MoviesPersistenceContract.InTheatersEntity.TABLE_NAME, "${MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID} LIKE ?", movieId)
+        db.delete(tableName, "${MoviesPersistenceContract.Top250Entity.COLUMN_MOVIE_ID} LIKE ?", movieId)
     }
 }

@@ -21,6 +21,9 @@ import java.util.*
  * Created by rrr on 2017/7/17.
  */
 class ZhihuFragment : Fragment(), ZhihuContract.View {
+    override fun setPresenter(presenter: ZhihuContract.Presenter) {
+        mPresenter=presenter
+    }
 
 
     private object SingletonHolder {
@@ -31,7 +34,7 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
         fun NewInstance(): ZhihuFragment = SingletonHolder.Instance
     }
 
-    private var mPresenter: ZhihuPresenter = ZhihuPresenter(this)
+    private var mPresenter: ZhihuContract.Presenter = ZhihuPresenter(this)
     private var mDatas = ArrayList<ZhihuItem>()
     private var mAdapter: ZhihuAdapter? = null
     private var mdate: String?=null

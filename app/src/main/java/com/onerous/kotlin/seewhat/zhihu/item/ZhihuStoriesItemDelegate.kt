@@ -34,7 +34,7 @@ class ZhihuStoriesItemDelegate:ItemViewDelegate<ZhihuItem> {
             holder.setVisible(R.id.story_frame_iv,false)
         }
 
-        holder.getConvertView().setOnClickListener(View.OnClickListener {
+        holder.convertView.setOnClickListener {
             Logger.d(storiesEntity.title)
             val intent = Intent(mContext, ZhihuStoryDetailActivity::class.java)
             val bundle= Bundle()
@@ -42,7 +42,7 @@ class ZhihuStoriesItemDelegate:ItemViewDelegate<ZhihuItem> {
             bundle.putString("storyTitle", storiesEntity.title)
             intent.putExtra("story",bundle)
             mContext.startActivity(intent)
-        })
+        }
     }
 
     override fun getItemViewLayoutId(): Int = R.layout.item_zhihu_stories_list

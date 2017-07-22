@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_in_theaters.view.*
  * Created by rrr on 2017/7/15.
  */
 class InTheatersFragment : Fragment(), InTheatersContract.View {
+
+
     private object SingletonHolder {
         val Instance = InTheatersFragment()
     }
@@ -33,18 +35,17 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
 
     private var mDatas: ArrayList<MoviesBean.Subjects> = ArrayList()
     private lateinit var mAdapter: InTheatersAdapter
-    private lateinit var mPresenter: InTheatersPresenter
+    private lateinit var mPresenter: InTheatersContract.Presenter
 
     fun init() {
         mAdapter = InTheatersAdapter(context, mDatas)
         mPresenter = InTheatersPresenter(this)
         recyclerView.setLayoutManager(GridLayoutManager(context, 2))
         recyclerView.adapter = mAdapter
-        mPresenter.getInTheatersMovies()
 
         swipeRefreshLayout.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
 
-        swipeRefreshLayout.setOnRefreshListener(mPresenter::getInTheatersMovies)
+        swipeRefreshLayout.setOnRefreshListener { mPresenter.loadInTheatersMovies(false) }
     }
 
     override fun showError(error: String?) {
@@ -53,7 +54,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
             Snackbar.make(recyclerView,
                     getString(R.string.please_check_your_network),
                     Snackbar.LENGTH_INDEFINITE).setAction("重试", {
-                mPresenter.getInTheatersMovies()
+                mPresenter.loadInTheatersMovies(true)
             }).show()
         }
     }
@@ -66,17 +67,18 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         // Make sure setRefreshing() is called after the layout is done with everything else.
         srl.post({ srl.setRefreshing(active) })
     }
-    override fun showMovies(moviesBean: MoviesBean) {
+
+
+    override fun showMovies(movies: List<MoviesBean.Subjects>) {
         mDatas.clear()
-        mDatas.addAll(moviesBean.subjects)
+        mDatas.addAll(movies)
         mAdapter.notifyDataSetChanged()
         recyclerView.scrollToPosition(0)
         swipeRefreshLayout.isRefreshing = false
     }
-
-//    override fun setPresenter(presenter: InTheatersContract.Presenter) {
-////        mPresenter=presenter
-//    }
+    override fun setPresenter(presenter: InTheatersContract.Presenter) {
+        mPresenter=presenter
+    }
 
     override fun showProgressDialog() {
         swipeRefreshLayout.isRefreshing = true
@@ -86,6 +88,15 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         swipeRefreshLayout.isRefreshing = false
     }
 
+    override fun onPause() {
+        super.onPause()
+        mPresenter.unsubscribe()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mPresenter.subscribe()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_in_theaters, container, false);

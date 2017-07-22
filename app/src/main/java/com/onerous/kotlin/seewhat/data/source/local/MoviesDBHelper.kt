@@ -20,24 +20,39 @@ class MoviesDBHelper(val context: Context) : SQLiteOpenHelper(context, DATABASE_
 
         private val COMMA_SEP = ","
 
-        private val SQL_CREATE_ENTRIES =
-                "CREATE TABLE " + MoviesPersistenceContract.MovieEntity.TABLE_NAME + " (" +
-                        MoviesPersistenceContract.MovieEntity._ID + TEXT_TYPE + " PRIMARY KEY," +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_MOVIE_ID + TEXT_TYPE + COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_NAME_DIRECTORS + TEXT_TYPE + COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_NAME_CASTS + TEXT_TYPE + COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_RATING + DOUBLE_TYPE + COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_GENRES + TEXT_TYPE + COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_YEARS + TEXT_TYPE + COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_LARGE + TEXT_TYPE +COMMA_SEP +
-                        MoviesPersistenceContract.MovieEntity.COLUMN_IMAGE_URL_MEDIUM + TEXT_TYPE +
+        private val SQL_CREATE_INTHEATERS_ENTRIES =
+                "CREATE TABLE " + MoviesPersistenceContract.InTheatersEntity.TABLE_NAME + " (" +
+                        MoviesPersistenceContract.InTheatersEntity._ID + TEXT_TYPE + " PRIMARY KEY," +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING + DOUBLE_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_YEARS + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE + TEXT_TYPE +COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_MEDIUM + TEXT_TYPE +
+                        " )"
+        val top250_TABLE_NAME="top250"
+        private val SQL_CREATE_TOP250_ENTRIES =
+                "CREATE TABLE " + top250_TABLE_NAME + " (" +
+                        MoviesPersistenceContract.InTheatersEntity._ID + TEXT_TYPE + " PRIMARY KEY," +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING + DOUBLE_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_YEARS + TEXT_TYPE + COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE + TEXT_TYPE +COMMA_SEP +
+                        MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_MEDIUM + TEXT_TYPE +
                         " )"
 
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(SQL_CREATE_ENTRIES)
+        db.execSQL(SQL_CREATE_INTHEATERS_ENTRIES)
+        db.execSQL(SQL_CREATE_TOP250_ENTRIES)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

@@ -1,6 +1,5 @@
 package com.onerous.kotlin.seewhat.inTheaters
 
-import com.onerous.kotlin.seewhat.api.ApiService
 import com.onerous.kotlin.seewhat.data.source.MoviesRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -9,47 +8,45 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by rrr on 2017/7/15.
  */
-class InTheatersPresenter(val fragment: InTheatersContract.View) : InTheatersContract.Presenter {
+class InTheatersPresenter(val view: InTheatersContract.View) : InTheatersContract.Presenter {
+    init {
+        view.setPresenter(this)
+    }
 
-    val mMoviesRepository=MoviesRepository
+    val mMoviesRepository = MoviesRepository.InTheatersDataRepository
     var mFirstLoad = true
-    private val mSubscriptions=CompositeDisposable()
+    private val mCompositeDisposable = CompositeDisposable()
 
     override fun subscribe() {
-        getInTheatersMovies(false)
+        loadInTheatersMovies(false)
     }
 
     override fun unsubscribe() {
-        mSubscriptions.clear()
+        mCompositeDisposable.clear()
     }
 
-    override fun getInTheatersMovies() {
-        fragment.showProgressDialog()
-        val disposable = ApiService.douBanService
-                .getInTheatersMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ it -> fragment.showMovies(it) },
-                        { error -> fragment.showError(error.message) },
-                        { fragment.hideProgressDialog() })
-        mSubscriptions.add(disposable)
-    }
-    override fun getInTheatersMovies(forceUpdate: Boolean) {
-        getInTheatersMovies(forceUpdate || mFirstLoad, true)
+    override fun loadInTheatersMovies(forceUpdate: Boolean) {
+        loadInTheatersMovies(forceUpdate || mFirstLoad, true)
         mFirstLoad = false
     }
 
-    private fun getInTheatersMovies(forceUpdate: Boolean, showLoadingUI: Boolean) {
+    private fun loadInTheatersMovies(forceUpdate: Boolean, showLoadingUI: Boolean) {
         if (showLoadingUI) {
-            fragment.setLoadingIndicator(true)
+            view.setLoadingIndicator(true)
         }
         if (forceUpdate) {
             mMoviesRepository.refreshMovies()
         }
 
-        mSubscriptions.clear()
-//        val subscription = mMoviesRepository
-//
-//        mSubscriptions.add(subscription)
+        mCompositeDisposable.clear()
+        val disposable = mMoviesRepository
+                .getMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ it -> view.showMovies(it) }
+                        , { error -> view.showError(error.toString()) }
+                        , { view.hideProgressDialog() }
+                        , { view.showProgressDialog() })
+        mCompositeDisposable.add(disposable)
     }
 }

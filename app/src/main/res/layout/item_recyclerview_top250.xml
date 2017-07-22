@@ -7,7 +7,7 @@
     android:layout_height="@dimen/item_card_height"
     android:layout_marginTop="@dimen/card_margin_vertical"
     android:background="@color/white"
-    android:foreground="?attr/selectableItemBackground"
+    android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="@dimen/card_recycler_corner_radius"
     card_view:cardElevation="@dimen/card_recycler_elevation">
 

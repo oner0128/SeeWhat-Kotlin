@@ -42,7 +42,10 @@ class Top250Fragment : Fragment(), Top250Contract.View {
     private lateinit var mLoadMoreWrapper: LoadMoreWrapper<MoviesBean.Subjects>
     private var mDatas: ArrayList<MoviesBean.Subjects> = ArrayList()
     private lateinit var mAdapter: Top250Adapter
-    private lateinit var mPresenter: Top250Presenter
+    private lateinit var mPresenter: Top250Contract.Presenter
+    override fun setPresenter(presenter: Top250Contract.Presenter) {
+        mPresenter = presenter
+    }
 
     fun init() {
         //init adapter and presenter
@@ -50,26 +53,21 @@ class Top250Fragment : Fragment(), Top250Contract.View {
         mPresenter = Top250Presenter(this)
         recyclerView.setLayoutManager(LinearLayoutManager(context))
 
-        val mHeaderAndFooterWrapper=HeaderAndFooterWrapper<MoviesBean.Subjects>(mAdapter)
-//        val headtv=TextView(context)
-//        headtv.text="header"
-//        val foottv=TextView(context)
-//        foottv.text="foot"
-//        mHeaderAndFooterWrapper.addHeaderView(headtv)
-//        mHeaderAndFooterWrapper.addFootView(foottv)
+        val mHeaderAndFooterWrapper = HeaderAndFooterWrapper<MoviesBean.Subjects>(mAdapter)
+
         mLoadMoreWrapper = LoadMoreWrapper<MoviesBean.Subjects>(mHeaderAndFooterWrapper)
         mLoadMoreWrapper.setLoadMoreView(R.layout.item_loading_more)
         recyclerView.adapter = mLoadMoreWrapper
         //listener
         mLoadMoreWrapper.setOnLoadMoreListener({
             if (isFirstLoad) {
-                Logger.d("top250:firstloading" )
-            } else if (!isLoading&&start < total) {
+                Logger.d("top250:firstloading")
+            } else if (!isLoading && start < total) {
                 start += count
-                isLoading=true
+                isLoading = true
                 Logger.d("top250:" + start + "-" + count)
                 mPresenter.getMoreTop250Movies(start, count)
-            } else if (!isFirstLoad&&!isLoading&&start>=total){
+            } else if (!isFirstLoad && !isLoading && start >= total) {
                 Logger.d("no more movies")
             }
         })
@@ -85,7 +83,7 @@ class Top250Fragment : Fragment(), Top250Contract.View {
 
     fun initData() {
         isFirstLoad = false
-        isLoading=true
+        isLoading = true
         start = 0
         count = 15
         total = 0
@@ -111,14 +109,14 @@ class Top250Fragment : Fragment(), Top250Contract.View {
 
         recyclerView.scrollToPosition(0)
         swipeRefreshLayout.isRefreshing = false
-        isLoading=false
+        isLoading = false
     }
 
     override fun showMoreMovies(moviesBean: MoviesBean) {
         total = moviesBean.total
         mDatas.addAll(moviesBean.subjects)
         mLoadMoreWrapper.notifyDataSetChanged()
-        isLoading=false
+        isLoading = false
     }
 //    override fun setPresenter(presenter: Top250Contract.Presenter) {
 ////        mPresenter=presenter

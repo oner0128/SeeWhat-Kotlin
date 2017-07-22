@@ -80,27 +80,26 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun getMovieDetail() {
-        if (id != null) {
-            showProgressDialog()
-            val dis = ApiService.douBanService
-                    .getMovieDetail(id)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { it ->
-                                hideProgressDialog()
-                                showMovieDetail(it)
-                            }
-                            , { e -> showError(e.toString()) }
-                            , {
-                        hideProgressDialog()
-                        collapsing_layout.setTitle(title)
-                        //设置当toolbar扩展时为透明，即不可见，只有收缩时可见
-                        collapsing_layout.setExpandedTitleColor(resources.getColor(R.color.transparent_white))
-                        collapsing_layout.setCollapsedTitleTextColor(resources.getColor(R.color.white))
-                    })
-            CompositeDisposable().add(dis)
-        }
+        showProgressDialog()
+        val dis = ApiService.douBanService
+                .getMovieDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { it ->
+                            hideProgressDialog()
+                            showMovieDetail(it)
+                        }
+                        , { e -> showError(e.toString()) }
+                        , {
+                    hideProgressDialog()
+                    collapsing_layout.setTitle(title)
+                    //设置当toolbar扩展时为透明，即不可见，只有收缩时可见
+                    collapsing_layout.setExpandedTitleColor(resources.getColor(R.color.transparent_white))
+                    collapsing_layout.setCollapsedTitleTextColor(resources.getColor(R.color.white))
+                })
+        CompositeDisposable().add(dis)
+
     }
 
     private fun showMovieDetail(movieDetailBean: MovieDetailBean) {
@@ -176,7 +175,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
         when (id) {
             R.id.action_moreInfo -> {
-                showCustomTabs(MovieUrl,this)
+                showCustomTabs(MovieUrl, this)
                 true
             }
             android.R.id.home -> {
@@ -190,7 +189,8 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private lateinit var MovieUrl: String
 }
-fun showCustomTabs(url:String?,context: Context) {
+
+fun showCustomTabs(url: String?, context: Context) {
     if (url == null) return
     val builder = CustomTabsIntent.Builder()
     val customTabsIntent = builder.build()
