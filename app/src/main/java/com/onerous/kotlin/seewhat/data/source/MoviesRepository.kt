@@ -19,11 +19,11 @@ object MoviesRepository {
         private val remoteSource: MoviesDataSource.RemoteInTheaters = MoviesRemoteDataSource.RemoteInTheaters
         private val localSource: MoviesDataSource.LocalInTheaters = MoviesLocalDataSource.LocalInTheaters
         private val mCachedMovies: MutableMap<String, MoviesBean.Subjects> by lazy { LinkedHashMap<String, MoviesBean.Subjects>() }
-        private var mCacheIsDirty = false
+        var mCacheIsDirty = false
 
         override fun getMovies(): Observable<List<MoviesBean.Subjects>> {
             // Respond immediately with cache if available and not dirty
-            if (!mCacheIsDirty) {
+            if (!mCacheIsDirty&&mCachedMovies.isNotEmpty()) {
                 return Observable.fromIterable(mCachedMovies.values).toList().toObservable()
             }
 
@@ -106,22 +106,24 @@ object MoviesRepository {
     object Top250DataRepository : MoviesDataSource.DataRepository {
 
         private val remoteSource = MoviesRemoteDataSource.RemoteTop250
-        private val localSource = MoviesLocalDataSource.LocalInTheaters
-        private var start = 0
+        private val localSource = MoviesLocalDataSource.LocalTop250
         private val mCachedMovies: MutableMap<String, MoviesBean.Subjects> by lazy { LinkedHashMap<String, MoviesBean.Subjects>() }
-        private var mCacheIsDirty = false
+        var mCacheIsDirty = false
 
         override fun getMovies(start: Int, count: Int): Observable<List<MoviesBean.Subjects>> {
             // Respond immediately with cache if available and not dirty
-            if (!mCacheIsDirty) {
-                return Observable.fromIterable(mCachedMovies.values).toList().toObservable()
+            if (!mCacheIsDirty&& mCachedMovies.isNotEmpty()) {
+                return Observable.fromIterable(mCachedMovies.values)
+                        .skip(start.toLong())
+                        .take(count.toLong())
+                        .toList().toObservable()
             }
 
             if (mCacheIsDirty) {
                 return getAndSaveRemoteTasks(start, count)
             } else {
                 // Query the local storage if available. If not, query the network.
-                return getAndCacheLocalTasks()
+                return getAndCacheLocalTasks(start,count)
             }
         }
 
@@ -166,7 +168,8 @@ object MoviesRepository {
             mCachedMovies.remove(movieId)
         }
 
-        private fun getAndCacheLocalTasks(): Observable<List<MoviesBean.Subjects>> = localSource.getMovies()
+        private fun getAndCacheLocalTasks(start: Int,count: Int): Observable<List<MoviesBean.Subjects>>
+                = localSource.getMovies(start,count)
                 .flatMap {
                     movies: List<MoviesBean.Subjects> ->
                     Observable.fromIterable(movies)

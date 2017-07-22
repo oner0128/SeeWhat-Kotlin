@@ -12,13 +12,11 @@ import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.MoviesBean
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_in_theaters.*
-import kotlinx.android.synthetic.main.fragment_in_theaters.view.*
 
 /**
  * Created by rrr on 2017/7/15.
  */
 class InTheatersFragment : Fragment(), InTheatersContract.View {
-
 
     private object SingletonHolder {
         val Instance = InTheatersFragment()
@@ -60,24 +58,20 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
     }
 
     override fun setLoadingIndicator(active: Boolean) {
-        if (view == null) {
-            return
-        }
-        val srl = view!!.swipeRefreshLayout
-        // Make sure setRefreshing() is called after the layout is done with everything else.
-        srl.post({ srl.setRefreshing(active) })
+        if (view == null) return
+        swipeRefreshLayout.post({ swipeRefreshLayout.setRefreshing(active) })
     }
 
 
     override fun showMovies(movies: List<MoviesBean.Subjects>) {
         mDatas.clear()
         mDatas.addAll(movies)
-        mAdapter.notifyDataSetChanged()
         recyclerView.scrollToPosition(0)
         swipeRefreshLayout.isRefreshing = false
     }
+
     override fun setPresenter(presenter: InTheatersContract.Presenter) {
-        mPresenter=presenter
+        mPresenter = presenter
     }
 
     override fun showProgressDialog() {
@@ -86,6 +80,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
 
     override fun hideProgressDialog() {
         swipeRefreshLayout.isRefreshing = false
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun onPause() {

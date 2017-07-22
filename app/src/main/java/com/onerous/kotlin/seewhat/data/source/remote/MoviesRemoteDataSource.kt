@@ -14,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
 object MoviesRemoteDataSource {
     object RemoteTop250 : MoviesDataSource.RemoteTop250 {
         override fun getMovies(start: Int, count: Int): Observable<List<MoviesBean.Subjects>> {
-            Logger.v("$start-$count")
+            Logger.v("RemoteTop250:$start-$count")
             return ApiService.douBanService
                     .getTop250Movies(start, count)
                     .subscribeOn(Schedulers.io())
@@ -24,7 +24,7 @@ object MoviesRemoteDataSource {
 
     object RemoteInTheaters : MoviesDataSource.RemoteInTheaters {
         override fun getMovies(): Observable<List<MoviesBean.Subjects>> {
-            Logger.v("")
+            Logger.v("RemoteInTheaters")
             return ApiService.douBanService
                     .getInTheatersMovies()
                     .subscribeOn(Schedulers.io())

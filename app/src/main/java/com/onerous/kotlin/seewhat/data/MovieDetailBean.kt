@@ -47,7 +47,7 @@ data class MovieDetailBean(var rating: Rating,
 
         override fun getPersonName(): String = name
 
-        override fun getJob(): String = javaClass.simpleName
+        override fun getJob(): String = "演员"
 
         override fun getImgUrl(): String = avatars.medium
 
@@ -64,7 +64,7 @@ data class MovieDetailBean(var rating: Rating,
 
         override fun getPersonName(): String = name
 
-        override fun getJob(): String = javaClass.simpleName
+        override fun getJob(): String = "导演"
 
         override fun getImgUrl(): String = avatars.medium
 

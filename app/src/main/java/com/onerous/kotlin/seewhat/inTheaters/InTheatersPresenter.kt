@@ -45,7 +45,10 @@ class InTheatersPresenter(val view: InTheatersContract.View) : InTheatersContrac
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it -> view.showMovies(it) }
                         , { error -> view.showError(error.toString()) }
-                        , { view.hideProgressDialog() }
+                        , {
+                    view.hideProgressDialog()
+                    view.setLoadingIndicator(false)
+                }
                         , { view.showProgressDialog() })
         mCompositeDisposable.add(disposable)
     }

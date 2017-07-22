@@ -23,19 +23,6 @@ object MoviesLocalDataSource {
     val db = sqlBrite.wrapDatabaseHelper(movieDBHelper, Schedulers.io());
     val mMovieMapperFunction = Function<Cursor, MoviesBean.Subjects> { it -> getMovie(it) }
 
-    //    object RemoteTop250 : MoviesDataSource.RemoteTop250 {
-//        override fun getMovies(start: Int, count: Int): Observable<List<com.onerous.kotlin.seewhat.data.MoviesBean.Subjects>> {
-//            return ApiService.douBanService
-//                    .getTop250Movies(start,count)
-//                    .subscribeOn(Schedulers.io())
-//                    .map { it -> it.subjects }
-//                    .map { it ->
-//                        val gson = Gson()
-//                        gson.fromJson(gson.toJson(it), com.onerous.kotlin.seewhat.data.MoviesBean.Subjects::class.java)
-//                    }
-//                    .toList().toObservable()
-//        }
-//    }
     object LocalInTheaters : MoviesDataSource.LocalInTheaters {
 
         val tableName: String = MoviesPersistenceContract.InTheatersEntity.TABLE_NAME
@@ -83,7 +70,7 @@ object MoviesLocalDataSource {
                     , MoviesPersistenceContract.Top250Entity.COLUMN_NAME_CASTS
                     , MoviesPersistenceContract.Top250Entity.COLUMN_IMAGE_URL_LARGE)
 
-            val sql: String = String.format("SELECT %s FROM %s WHERE %s BEWTEEN %s AND %s"
+            val sql: String = String.format("SELECT %s FROM %s WHERE %s BETWEEN %s AND %s"
                     , TextUtils.join(",", projection)
                     , tableName
                     , MoviesPersistenceContract.Top250Entity._ID
@@ -201,10 +188,6 @@ object MoviesLocalDataSource {
         contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_NAME_DIRECTORS, formatCastsToString(movie.directors))
         contentValues.put(MoviesPersistenceContract.Top250Entity.COLUMN_GENRES, formatListToString(movie.genres))
         db.insert(tableName, contentValues)
-    }
-
-    fun refreshMovies() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun deleteAllMovies(tableName: String) {
