@@ -9,9 +9,6 @@ import io.reactivex.schedulers.Schedulers
  * Created by rrr on 2017/7/17.
  */
 class ZhihuPresenter(val view: ZhihuContract.View) : ZhihuContract.Presenter {
-    init {
-        view.setPresenter(this)
-    }
 
     override fun getZhihuBeforeNews(date: String) {
         val disposable = ApiService.zhiHuService.getZhihuBeforeNews(date)

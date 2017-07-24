@@ -22,6 +22,7 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven {url "https://clojars.org/repo/"}
     }
 }
 
@@ -44,7 +45,6 @@ ext {
     rxandroidVersion = '2.0.1'
     rxkotlinVersion = '2.1.0'
     sqlbriteVersion = '2.0.0'
-    sqlbritekotlinVersion= '2.0.0'
-    retrofitVersion='2.2.0'
+    retrofitVersion='2.3.0'
     glideVersion='3.7.0'
 }

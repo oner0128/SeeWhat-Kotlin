@@ -9,7 +9,7 @@ import io.reactivex.Observable
 interface MoviesDataSource {
     interface DataRepository {
         fun getMovies(): Observable<List<MoviesBean.Subjects>>
-        fun getMovies(start: Int,count: Int): Observable<List<MoviesBean.Subjects>>
+        fun getMovies(start: Int, count: Int): Observable<List<MoviesBean.Subjects>>
         fun getMovie(movieId: String): Observable<MoviesBean.Subjects>
         fun saveMovies(movies: List<MoviesBean.Subjects>)
         fun saveMovie(movie: MoviesBean.Subjects)

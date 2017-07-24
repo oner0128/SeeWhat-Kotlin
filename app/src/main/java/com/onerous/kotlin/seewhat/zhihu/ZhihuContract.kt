@@ -9,9 +9,10 @@ import com.onerous.kotlin.seewhat.data.ZhihuLatestNewsBean
  * Created by rrr on 2017/7/17.
  */
 interface ZhihuContract {
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
         fun showLastestNews(zhihuLatestNewsBean: ZhihuLatestNewsBean)
         fun showBeforeNews(zhihuBeforeNewsBean: ZhihuBeforeNewsBean)
+        fun showNewsDetail()
     }
 
     interface Presenter : BasePresenter {

@@ -57,7 +57,6 @@ class ZhihuStoryDetailActivity : AppCompatActivity() {
                 .load(imgUrl)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .placeholder(R.mipmap.ic_launcher)
                 .into(iV_zhihustory_header_image)
         tv_zhihustory_header_title.setText(storyContentBean.title)
         tv_zhihustory_header_copyright.setText(storyContentBean.image_source)

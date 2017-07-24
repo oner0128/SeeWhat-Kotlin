@@ -1,13 +1,10 @@
 package com.onerous.kotlin.seewhat.data.source.local
 
-import android.provider.BaseColumns
-
 /**
  * Created by rrr on 2017/7/20.
  */
 object MoviesPersistenceContract {
     object InTheatersEntity {
-        const val _COUNT = "_count"
         const val _ID = "_id"
         const val TABLE_NAME = "Intheaters"
         const val COLUMN_MOVIE_ID = "movieid"
@@ -20,10 +17,10 @@ object MoviesPersistenceContract {
         const val COLUMN_IMAGE_URL_LARGE = "image_url_large"
         const val COLUMN_IMAGE_URL_MEDIUM = "image_url_medium"
     }
+
     object Top250Entity {
-        const val _COUNT = "_count"
         const val _ID = "_id"
-        const val TABLE_NAME = "top250"
+        const val TABLE_NAME = "Top250"
         const val COLUMN_MOVIE_ID = "movieid"
         const val COLUMN_TITLE = "title"
         const val COLUMN_NAME_DIRECTORS = "directors"

@@ -2,17 +2,17 @@
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefreshLayout"
+    android:id="@+id/swipeRefreshLayout_top250"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerView_top250"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/activity_background"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/item_recyclerview_intheaters"></android.support.v7.widget.RecyclerView>
+        android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+
 </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -11,4 +11,6 @@
     <string name="title_activity_zhihu_story_detail">ZhihuStoryDetailActivity</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="action_moreinfo">更多信息</string>
+    <string name="no_more_movie">无更多电影</string>
+    <string name="somthing_wrong">加载失败，点击重试</string>
 </resources>

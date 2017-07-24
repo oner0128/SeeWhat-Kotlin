@@ -1,5 +1,6 @@
 package com.onerous.kotlin.seewhat
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -11,10 +12,12 @@ import com.onerous.kotlin.seewhat.zhihu.ZhihuFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val mInTheaterFragment = InTheatersFragment.NewInstance()
-    private val mZhihuFragment: ZhihuFragment= ZhihuFragment.NewInstance()
-    private val mTop250Fragment: Top250Fragment by lazy { Top250Fragment.NewInstance() }
-    private  lateinit var currentFragment: Fragment
+
+    private val mInTheaterFragment: Fragment by lazy { InTheatersFragment.NewInstance() }
+    private val mZhihuFragment: Fragment  by lazy { ZhihuFragment.NewInstance() }
+    private val mTop250Fragment: Fragment  by lazy { Top250Fragment.NewInstance() }
+    private var currentFragment: Fragment? = null
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_intheater -> {
@@ -43,26 +46,39 @@ class MainActivity : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         supportActionBar?.setTitle(R.string.toolbar_title_intheater)
 
-        addFragmentToActivity(supportFragmentManager, R.id.container, mInTheaterFragment)
-        currentFragment=mInTheaterFragment
+
+        currentFragment = supportFragmentManager.findFragmentById(R.id.container)
+        if (currentFragment == null) addorShowFragmentToActivity(supportFragmentManager, R.id.container, mInTheaterFragment)
     }
 
     fun addorShowFragmentToActivity(fragmentManager: FragmentManager,
                                     frameId: Int, fragment: Fragment) {
-        if (currentFragment == fragment) return
+        if (currentFragment == null) {
+            addFragmentToActivity(supportFragmentManager, R.id.container, fragment)
+            currentFragment = fragment
+            return
+        } else if (currentFragment == fragment) return
         val transaction = fragmentManager.beginTransaction()
         if (fragment.isAdded) transaction.hide(currentFragment).show(fragment)
         else transaction.hide(currentFragment).add(frameId, fragment)
         transaction.commit()
-        currentFragment.userVisibleHint = false
+        currentFragment?.userVisibleHint = false
         currentFragment = fragment
-        currentFragment.userVisibleHint = true
+        currentFragment?.userVisibleHint = true
     }
+
     fun addFragmentToActivity(fragmentManager: FragmentManager,
-                                    frameId: Int, fragment: Fragment) {
+                              frameId: Int, fragment: Fragment) {
 
         val transaction = fragmentManager.beginTransaction()
-        transaction.add(frameId,fragment)
+        transaction.add(frameId, fragment)
         transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addCategory(Intent.CATEGORY_HOME)
+        startActivity(intent)
     }
 }

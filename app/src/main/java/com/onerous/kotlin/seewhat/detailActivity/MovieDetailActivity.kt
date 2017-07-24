@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.api.ApiService
 import com.onerous.kotlin.seewhat.data.MovieDetailBean
@@ -20,7 +21,6 @@ import com.onerous.kotlin.seewhat.data.PersonBean
 import com.onerous.kotlin.seewhat.util.formatCastsToString
 import com.onerous.kotlin.seewhat.util.formatListToString
 import com.orhanobut.logger.Logger
-import com.zhy.adapter.recyclerview.MultiItemTypeAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -35,7 +35,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private var imgUrl: String? = null
     private lateinit var id: String
     private var persons = ArrayList<PersonBean>()
-    lateinit var adapter: MultiItemTypeAdapter<PersonBean>
+    lateinit var adapter: PersonItemAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
@@ -136,10 +136,14 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun setAdapter() {
-        adapter = MultiItemTypeAdapter<PersonBean>(this, persons)
-        adapter.addItemViewDelegate(PersonItemDelegate())
+        adapter = PersonItemAdapter(R.layout.item_recyclerview_person, persons)
+
         rv_casts.setLayoutManager(LinearLayoutManager(this))
-        rv_casts.setAdapter(adapter)
+        rv_casts.adapter = adapter
+
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            showCustomTabs("https://movie.douban.com/celebrity/${persons.get(position).getPersonId()}/mobile",baseContext)
+        }
     }
 
     fun showProgressDialog() {

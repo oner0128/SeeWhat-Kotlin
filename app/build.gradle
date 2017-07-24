@@ -18,9 +18,12 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
@@ -44,24 +47,25 @@ dependencies {
     //rxjava2
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxkotlinVersion"
+//    implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxkotlinVersion"
     //retrofit2
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
     //sqlbrite2
     implementation "com.squareup.sqlbrite2:sqlbrite:$rootProject.sqlbriteVersion"
-    implementation "com.squareup.sqlbrite2:sqlbrite-kotlin:$rootProject.sqlbritekotlinVersion"
     //Glide
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     implementation 'jp.wasabeef:glide-transformations:2.0.1'
     //adapter
-    implementation 'com.zhy:base-rvadapter:3.0.3'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.25'
     //banner
     implementation 'cn.bingoogolapple:bga-banner:2.1.7@aar'
     //logger
     implementation 'com.orhanobut:logger:2.1.1'
     //hide bottom
     implementation 'com.github.githubwing:ByeBurger:1.2.3'
+    //anko
+//    compile "org.jetbrains.anko:anko:0.10.1"
 
 }

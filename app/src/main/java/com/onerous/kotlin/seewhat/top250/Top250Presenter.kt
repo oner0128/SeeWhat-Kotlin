@@ -1,6 +1,8 @@
 package com.onerous.kotlin.seewhat.inTheaters
 
-import com.onerous.kotlin.seewhat.api.ApiService
+import com.onerous.kotlin.seewhat.App
+import com.onerous.kotlin.seewhat.data.source.MoviesRepository
+import com.orhanobut.logger.Logger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -9,40 +11,38 @@ import io.reactivex.schedulers.Schedulers
  * Created by rrr on 2017/7/15.
  */
 class Top250Presenter(val view: Top250Contract.View) : Top250Contract.Presenter {
-    init {
-        view.setPresenter(this)
+
+    private val mMoviesRepository = App.mMoviesRepository.Top250Repository
+    private val mCompositeDisposable = CompositeDisposable()
+
+    override fun loadTop250Movies(forceUpdate: Boolean, start: Int, count: Int) {
+
+        if (forceUpdate) mMoviesRepository.refreshMovies()
+
+        mCompositeDisposable.clear()
+
+        if (start == 0) view.showProgressDialog()
+        val disposable = mMoviesRepository
+                .getMovies(start, count)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { it ->
+                            Logger.v("loadTop250Movies${it.size}")
+                            if (start == 0) view.showMovies(it)
+                            else view.showMoreMovies(it)
+                        }
+                        , { error -> view.showError(error.toString()) }
+                        , { view.hideProgressDialog() })
+
+        mCompositeDisposable.add(disposable)
     }
-    val compositeDisposable=CompositeDisposable()
+
     override fun subscribe() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        loadTop250Movies(false, 0, 10)
     }
 
     override fun unsubscribe() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getTop250Movies(start: Int, count: Int) {
-        view.showProgressDialog()
-        val disposable = ApiService.douBanService
-                .getTop250Movies(start,count)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ it -> view.showMovies(it) },
-                        { error -> view.showError(error.message) },
-                        { view.hideProgressDialog() })
-        compositeDisposable.add(disposable)
-    }
-    override fun getMoreTop250Movies(start: Int, count: Int) {
-//        view.showProgressDialog()
-        val disposable = ApiService.douBanService
-                .getTop250Movies(start,count)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ it -> view.showMoreMovies(it) }
-                        , { error -> view.showError(error.message) }
-//                        , { view.hideProgressDialog() }
-                )
-
-        compositeDisposable.add(disposable)
+        mCompositeDisposable.clear()
     }
 }

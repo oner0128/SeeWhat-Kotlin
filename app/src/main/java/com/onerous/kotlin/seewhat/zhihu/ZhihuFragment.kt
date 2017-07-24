@@ -10,10 +10,7 @@ import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.ZhihuBeforeNewsBean
 import com.onerous.kotlin.seewhat.data.ZhihuLatestNewsBean
 import com.onerous.kotlin.seewhat.util.DateUtil
-import com.onerous.kotlin.seewhat.zhihu.item.ZhihuHeaderTitleItem
-import com.onerous.kotlin.seewhat.zhihu.item.ZhihuItem
 import com.orhanobut.logger.Logger
-import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper
 import kotlinx.android.synthetic.main.fragment_zhihu.*
 import java.util.*
 
@@ -21,10 +18,15 @@ import java.util.*
  * Created by rrr on 2017/7/17.
  */
 class ZhihuFragment : Fragment(), ZhihuContract.View {
-    override fun setPresenter(presenter: ZhihuContract.Presenter) {
-        mPresenter=presenter
+    override fun showNewsDetail() {
+//        Logger.d(storiesEntity.title)
+//            val intent = Intent(mContext, ZhihuStoryDetailActivity::class.java)
+//            val bundle= Bundle()
+//            bundle.putInt("storyId", storiesEntity.id)
+//            bundle.putString("storyTitle", storiesEntity.title)
+//            intent.putExtra("story",bundle)
+//            mContext.startActivity(intent)
     }
-
 
     private object SingletonHolder {
         val Instance = ZhihuFragment()
@@ -35,33 +37,40 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
     }
 
     private var mPresenter: ZhihuContract.Presenter = ZhihuPresenter(this)
-    private var mDatas = ArrayList<ZhihuItem>()
+    private var mDatas = ArrayList<ZhihuMultiItem>()
     private var mAdapter: ZhihuAdapter? = null
-    private var mdate: String?=null
-    lateinit private var mLoadMoreWrapper: LoadMoreWrapper<ZhihuItem>
+    private var mdate: String? = null
+//    lateinit private var mLoadMoreWrapper: LoadMoreWrapper<ZhihuMultiItem>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
 
     private fun init() {
-        recyclerView.setLayoutManager(LinearLayoutManager(context))
-        mAdapter = ZhihuAdapter(context, mDatas)
-        mLoadMoreWrapper = LoadMoreWrapper(mAdapter)
-        mLoadMoreWrapper.setLoadMoreView(R.layout.item_loading_more)
-        mLoadMoreWrapper.setOnLoadMoreListener({
-                if (mdate != null) {
-                    Logger.d(DateUtil.getYesterday(mdate!!))
-                    mPresenter.getZhihuBeforeNews(mdate!!)
-                }
+        recyclerView_zhihu.setLayoutManager(LinearLayoutManager(context))
+        mAdapter = ZhihuAdapter(mDatas)
+//        mLoadMoreWrapper = LoadMoreWrapper(mAdapter)
+//        mLoadMoreWrapper.setLoadMoreView(R.layout.item_loading_more)
+//        mLoadMoreWrapper.setOnLoadMoreListener({
+//                if (mdate != null) {
+//                    Logger.d(DateUtil.getYesterday(mdate!!))
+//                    mPresenter.getZhihuBeforeNews(mdate!!)
+//                }
+//            }
+//        )
+
+//        recyclerView_zhihu.adapter = mLoadMoreWrapper
+        recyclerView_zhihu.adapter = mAdapter
+        mAdapter?.setOnLoadMoreListener({
+            if (mdate != null) {
+                Logger.d(DateUtil.getYesterday(mdate!!))
+                mPresenter.getZhihuBeforeNews(mdate!!)
             }
-        )
+        }, recyclerView_zhihu)
 
-        recyclerView.adapter = mLoadMoreWrapper
-
-        swipeRefreshLayout.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
+        swipeRefreshLayout_zhihu.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
         //swipe refresh
-        swipeRefreshLayout.setOnRefreshListener(this::getLatestNews)
+        swipeRefreshLayout_zhihu.setOnRefreshListener(this::getLatestNews)
         getLatestNews()
     }
 
@@ -70,42 +79,43 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
     }
 
     override fun showProgressDialog() {
-        swipeRefreshLayout.isRefreshing = true
+        swipeRefreshLayout_zhihu.isRefreshing = true
     }
 
     override fun hideProgressDialog() {
-        swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout_zhihu.isRefreshing = false
     }
 
     override fun showError(error: String?) {
         Logger.e(error)
+        mAdapter?.loadMoreFail()
     }
 
     override fun showLastestNews(zhihuLatestNewsBean: ZhihuLatestNewsBean) {
         mDatas.clear()
         mdate = zhihuLatestNewsBean.date
         //banner top stories
-//        Logger.d(mdate)
-        mDatas.add(zhihuLatestNewsBean)
+        mDatas.add(ZhihuMultiItem(ZhihuMultiItem.HEADER,zhihuLatestNewsBean))
         //date title
-        mDatas.add(ZhihuHeaderTitleItem(mdate!!))
+        Logger.d(mdate)
+        mDatas.add(ZhihuMultiItem(ZhihuMultiItem.DATE,mdate))
         //stories
-        mDatas.addAll(zhihuLatestNewsBean.stories)
+        zhihuLatestNewsBean.stories.forEach {it->mDatas.add(ZhihuMultiItem(ZhihuMultiItem.NEWS,it)) }
+
         mAdapter?.notifyDataSetChanged()
-        recyclerView.scrollToPosition(0)
-        swipeRefreshLayout.isRefreshing = false
+        recyclerView_zhihu.scrollToPosition(0)
+        swipeRefreshLayout_zhihu.isRefreshing = false
     }
 
     override fun showBeforeNews(zhihuBeforeNewsBean: ZhihuBeforeNewsBean) {
         mdate = zhihuBeforeNewsBean.date
-        //banner top stories
-        Logger.d(mdate)
         //date title
-        mDatas.add(ZhihuHeaderTitleItem(mdate!!))
+        Logger.d(mdate)
+        mDatas.add(ZhihuMultiItem(ZhihuMultiItem.DATE, mdate!!))
         //stories
-        mDatas.addAll(zhihuBeforeNewsBean.stories)
-        mLoadMoreWrapper.notifyDataSetChanged()
-        swipeRefreshLayout.isRefreshing = false
+        zhihuBeforeNewsBean.stories.forEach {it->mDatas.add(ZhihuMultiItem(ZhihuMultiItem.BEFORENEWS,it)) }
+        mAdapter?.loadMoreComplete()
+        swipeRefreshLayout_zhihu.isRefreshing = false
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
