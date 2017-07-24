@@ -1,5 +1,6 @@
 package com.onerous.kotlin.seewhat.zhihu
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.ZhihuBeforeNewsBean
 import com.onerous.kotlin.seewhat.data.ZhihuLatestNewsBean
+import com.onerous.kotlin.seewhat.detailActivity.ZhihuStoryDetailActivity
 import com.onerous.kotlin.seewhat.util.DateUtil
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_zhihu.*
@@ -40,7 +42,7 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
     private var mDatas = ArrayList<ZhihuMultiItem>()
     private var mAdapter: ZhihuAdapter? = null
     private var mdate: String? = null
-//    lateinit private var mLoadMoreWrapper: LoadMoreWrapper<ZhihuMultiItem>
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
@@ -49,28 +51,44 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
     private fun init() {
         recyclerView_zhihu.setLayoutManager(LinearLayoutManager(context))
         mAdapter = ZhihuAdapter(mDatas)
-//        mLoadMoreWrapper = LoadMoreWrapper(mAdapter)
-//        mLoadMoreWrapper.setLoadMoreView(R.layout.item_loading_more)
-//        mLoadMoreWrapper.setOnLoadMoreListener({
-//                if (mdate != null) {
-//                    Logger.d(DateUtil.getYesterday(mdate!!))
-//                    mPresenter.getZhihuBeforeNews(mdate!!)
-//                }
-//            }
-//        )
+        swipeRefreshLayout_zhihu.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
 
-//        recyclerView_zhihu.adapter = mLoadMoreWrapper
         recyclerView_zhihu.adapter = mAdapter
+        //listener
         mAdapter?.setOnLoadMoreListener({
             if (mdate != null) {
                 Logger.d(DateUtil.getYesterday(mdate!!))
                 mPresenter.getZhihuBeforeNews(mdate!!)
             }
         }, recyclerView_zhihu)
+        mAdapter?.setOnItemClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as ZhihuMultiItem
+            val storiesEntity = mDatas.get(position)
+            when (item.Itemtype) {
+                ZhihuMultiItem.NEWS -> {
+                    val intent = Intent(context, ZhihuStoryDetailActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putInt("storyId", storiesEntity.mLatestNews!!.id)
+                    bundle.putString("storyTitle", storiesEntity.mLatestNews!!.title)
+                    intent.putExtra("story", bundle)
+                    startActivity(intent)
+                }
+                 ZhihuMultiItem.BEFORENEWS->{
+                     val intent = Intent(context, ZhihuStoryDetailActivity::class.java)
+                     val bundle = Bundle()
+                     bundle.putInt("storyId", storiesEntity.mBeforeNews!!.id)
+                     bundle.putString("storyTitle", storiesEntity.mBeforeNews!!.title)
+                     intent.putExtra("story", bundle)
+                     startActivity(intent)
+                 }
+            }
 
-        swipeRefreshLayout_zhihu.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
+        }
+
         //swipe refresh
         swipeRefreshLayout_zhihu.setOnRefreshListener(this::getLatestNews)
+
+        //init
         getLatestNews()
     }
 
@@ -97,7 +115,7 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
         //banner top stories
         mDatas.add(ZhihuMultiItem(ZhihuMultiItem.HEADER,zhihuLatestNewsBean))
         //date title
-        Logger.d(mdate)
+//        Logger.d(mdate)
         mDatas.add(ZhihuMultiItem(ZhihuMultiItem.DATE,mdate))
         //stories
         zhihuLatestNewsBean.stories.forEach {it->mDatas.add(ZhihuMultiItem(ZhihuMultiItem.NEWS,it)) }

@@ -59,7 +59,7 @@ class ZhihuAdapter(data: MutableList<ZhihuMultiItem>?) : BaseMultiItemQuickAdapt
             }
 
             ZhihuMultiItem.DATE -> {
-                Logger.v("${item.mDate}")
+//                Logger.v("${item.mDate}")
                 if (helper.layoutPosition == 1) helper.setText(R.id.tv_zhihu_date, "今日热闻")
                 else helper.setText(R.id.tv_zhihu_date, DateUtil.formatStrDate(item.mDate!!, "yyyyMMdd"))
             }

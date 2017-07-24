@@ -13,7 +13,7 @@ open class ZhihuMultiItem(val Itemtype: Int) : MultiItemEntity {
         this.mDate= date
     }
     constructor(itemType: Int, zhihuLatestNewsBean: ZhihuLatestNewsBean) : this(itemType) {
-        Logger.v("${zhihuLatestNewsBean.date}")
+//        Logger.v("${zhihuLatestNewsBean.date}")
         this.mZhihuLatestNewsBean= zhihuLatestNewsBean
     }
     constructor(itemType: Int, storie: ZhihuLatestNewsBean.Stories) : this(itemType) {
