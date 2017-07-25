@@ -48,6 +48,7 @@ class Top250Fragment : Fragment(), Top250Contract.View {
         init()
         if (savedInstanceState != null) mFirstLoad = savedInstanceState.getBoolean("firstLoad")
         if (mFirstLoad) mPresenter.subscribe()
+        mFirstLoad=false
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -93,12 +94,12 @@ class Top250Fragment : Fragment(), Top250Contract.View {
 
         mAdapter.setOnLoadMoreListener(
                 {
-                    Handler().postDelayed({
+//                    Handler().postDelayed({
                         Logger.v("start load more$start")
                         if (start < total) {
                             mPresenter.loadTop250Movies(false, start, count)
                         } else showNoMovies()
-                    }, 200)
+//                    }, 1000)
                 }
                 , recyclerView_top250)
 
@@ -134,7 +135,7 @@ class Top250Fragment : Fragment(), Top250Contract.View {
 
     override fun showNoMovies() {
         Toast.makeText(context, R.string.no_more_movie, Toast.LENGTH_LONG).show();
-        mAdapter.setEnableLoadMore(false);
+        mAdapter.loadMoreComplete();
     }
 
     override fun showMovieDetail(movie: MoviesBean.Subjects?) {
@@ -146,6 +147,5 @@ class Top250Fragment : Fragment(), Top250Contract.View {
         intent.putExtra("MovieImg", movie.images.large)
         startActivity(intent)
     }
-
 }
 

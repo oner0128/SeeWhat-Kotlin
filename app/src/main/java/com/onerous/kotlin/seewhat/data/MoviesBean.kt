@@ -9,18 +9,18 @@ data class MoviesBean(var count: Int,
                       var total: Int,
                       var title: String,
                       var subjects: List<Subjects>) {
-    data class Subjects(var rating: Rating,
+    data class Subjects(var rating: Rating= Subjects.Rating(),
                         var title: String=nullString,
                         var collect_count: Int=0,
                         var original_title: String=nullString,
                         var subtype: String=nullString,
                         var year: String=nullString,
-                        var images: Images,
+                        var images: Images= Subjects.Images(),
                         var alt: String=nullString,
                         var id: String=nullString,
-                        var genres: List<String>,
-                        var casts: List<Casts>,
-                        var directors: List<Directors>) {
+                        var genres: List<String> = arrayListOf<String>(),
+                        var casts: List<Casts> = arrayListOf<Subjects.Casts>(),
+                        var directors: List<Directors> = arrayListOf<Subjects.Directors>()) {
         data class Rating(var max: Int=0,
                           var average: Double=0.0,
                           var stars: String=nullString,
@@ -32,7 +32,7 @@ data class MoviesBean(var count: Int,
 
         data class Casts(var alt: String=nullString,
                          var avatars: Avatars=Avatars(),
-                         var name: String,
+                         var name: String=nullString,
                          var id: String=nullString) : PersonBean {
             override fun getPersonId(): String =id
 
@@ -49,7 +49,7 @@ data class MoviesBean(var count: Int,
 
         data class Directors(var alt: String=nullString,
                              var avatars: Avatars=Avatars(),
-                             var name: String,
+                             var name: String=nullString,
                              var id: String=nullString) : PersonBean {
             override fun getPersonId(): String =id
 

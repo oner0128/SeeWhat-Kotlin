@@ -48,20 +48,23 @@ class MoviesRepository private constructor(context: Context) {
             if (!mCacheIsDirty && mCachedMovies.isNotEmpty()) {
                 Logger.v("from cache")
                 return Observable.fromIterable(mCachedMovies.values)
-                        .subscribeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.computation())
                         .toList().toObservable()
             }
-            val remoteMovies = getAndSaveRemoteMovies()
+            var remoteMovies = getAndSaveRemoteMovies()
             if (mCacheIsDirty) {
                 Logger.v("from Remote")
                 return remoteMovies
             } else {
                 // Query the local storage if available. If not, query the network.
                 Logger.v("from Local")
-                val localMovies = getAndCacheLocalMovies()
+                var localMovies = getAndCacheLocalMovies()
+//                return localMovies
                 return Observable.concat(localMovies,remoteMovies)
-                        .filter { it->it.isNotEmpty() }
-                        .firstElement().toObservable()
+                        .filter { movies -> Logger.v("${movies.size}")
+                            movies.isNotEmpty() }
+                        .take(1)
+
             }
         }
 
@@ -80,11 +83,12 @@ class MoviesRepository private constructor(context: Context) {
 
         override fun saveMovies(movies: List<MoviesBean.Subjects>) {
             localSource.saveMovies(movies)
+            movies.forEach { movie -> if (!mCachedMovies.containsKey(movie.id)) mCachedMovies.put(movie.id, movie) }
         }
 
         override fun saveMovie(movie: MoviesBean.Subjects) {
             localSource.saveMovie(movie)
-            mCachedMovies.put(movie.id, movie)
+            if (!mCachedMovies.containsKey(movie.id)) mCachedMovies.put(movie.id, movie)
         }
 
         override fun refreshMovies() {
@@ -104,25 +108,19 @@ class MoviesRepository private constructor(context: Context) {
         private fun getAndCacheLocalMovies(): Observable<List<MoviesBean.Subjects>> {
             return localSource
                     .getMovies()
-                    .flatMap { movies ->
-                        Observable.fromIterable(movies).doOnNext { movie ->
+                    .doOnNext { movies ->
+                        movies.forEach { movie ->
                             if (!mCachedMovies.containsKey(movie.id)) mCachedMovies.put(movie.id, movie)
                         }
-                                .toList().toObservable()
-                    }
+                    }.subscribeOn(Schedulers.computation())
         }
 
         private fun getAndSaveRemoteMovies(): Observable<List<MoviesBean.Subjects>> {
             return remoteSource
                     .getMovies()
-                    .flatMap { movies ->
-                        Observable.fromIterable(movies).doOnNext { movie ->
-                            localSource.saveMovie(movie)
-                            if (!mCachedMovies.containsKey(movie.id)) mCachedMovies.put(movie.id, movie)
-                        }
-                                .doOnComplete { mCacheIsDirty = false }
-                                .toList().toObservable()
-                    }
+                    .doOnNext { movies -> saveMovies(movies) }
+                    .doOnComplete { mCacheIsDirty = false }
+                    .subscribeOn(Schedulers.io())
         }
 
         private fun getMovieWithId(movieId: String): MoviesBean.Subjects? {
@@ -150,28 +148,33 @@ class MoviesRepository private constructor(context: Context) {
 //            else {
             if (!mCacheIsDirty && mCachedMovies.size > start) {
                 Logger.v("from cache Cached.size${mCachedMovies.size} --$start")
-                val list = arrayListOf<MoviesBean.Subjects>()
-                var iterator = mCachedMovies.iterator()
-                for (i in start..start + count) {
-                    list.add(iterator.next().value)
-                }
-                return Observable.fromIterable(list)
-                        .subscribeOn(Schedulers.io())
+//                val list = arrayListOf<MoviesBean.Subjects>()
+//                var iterator = mCachedMovies.iterator()
+//                for (i in start..start + count) {
+//                    list.add(iterator.next().value)
+//                }
+//                return Observable.fromIterable(list)
+//                        .subscribeOn(Schedulers.io())
+//                        .toList().toObservable()
+                return Observable.fromIterable(mCachedMovies.values)
+                        .skip(start.toLong()).take(count.toLong())
+                        .subscribeOn(Schedulers.computation())
                         .toList().toObservable()
             }
 
-            val remoteMovies = getAndSaveRemoteMovies(start, count)
+            var remoteMovies = getAndSaveRemoteMovies(start, count).doOnNext({it->Logger.v(it.get(0).title)})
             if (mCacheIsDirty) {
                 Logger.v("from Remote")
                 return remoteMovies
             } else {
                 // Query the local storage if available. If not, query the network.
                 Logger.v("from Local")
-                val localMovies = getAndCacheLocalMovies(start, count)
-                return Observable.concat(localMovies,remoteMovies)
-                        .filter { movies -> movies.isNotEmpty() }
-                        .firstElement()
-                        .toObservable()
+                var localMovies = getAndCacheLocalMovies(start, count)
+//                return localMovies
+                return Observable.concat(localMovies, remoteMovies)
+                        .filter { moives->Logger.v("moives-size:${moives.size}")
+                            moives.size>=count }
+                        .take(1)
             }
 //            }
         }
@@ -195,7 +198,7 @@ class MoviesRepository private constructor(context: Context) {
 
         override fun saveMovies(movies: List<MoviesBean.Subjects>) {
             localSource.saveMovies(movies)
-            movies.forEach { it -> mCachedMovies.put(it.id, it) }
+            movies.forEach { it -> if (!mCachedMovies.containsKey(it.id)) mCachedMovies.put(it.id, it) }
         }
 
         override fun saveMovie(movie: MoviesBean.Subjects) {
@@ -219,29 +222,22 @@ class MoviesRepository private constructor(context: Context) {
 
         private fun getAndCacheLocalMovies(start: Int, count: Int): Observable<List<MoviesBean.Subjects>>
                 = localSource.getMovies(start, count)
-                .flatMap {
-                    movies: List<MoviesBean.Subjects> ->
-                    Logger.v("getAndCacheLocalMovies")
-                    Observable.fromIterable(movies)
-                            .doOnNext { movie ->
-                                if (!mCachedMovies.containsKey(movie.id)) mCachedMovies.put(movie.id, movie)
-                            }
-                            .toList().toObservable()
+//                .filter { movies -> movies.isNotEmpty() }
+                .doOnNext {
+                    movies ->
+                    Logger.v("getAndCacheLocalMovies:${movies.size}")
+                    movies.forEach { it -> if (!mCachedMovies.containsKey(it.id)) mCachedMovies.put(it.id, it) }
                 }
+//                .subscribeOn(Schedulers.computation())
 
         private fun getAndSaveRemoteMovies(start: Int, count: Int): Observable<List<MoviesBean.Subjects>>
                 = remoteSource.getMovies(start, count)
-                .flatMap {
-                    movies: List<MoviesBean.Subjects> ->
-                    Observable.fromIterable(movies)
-                            .doOnNext { movie ->
-                                localSource.saveMovie(movie)
-                                if (!mCachedMovies.containsKey(movie.id)) mCachedMovies.put(movie.id, movie)
-                            }
-                            .doOnComplete { mCacheIsDirty = false }
-                            .toList()
-                            .toObservable()
-                }
+                .doOnNext {
+                    movies ->
+                    Logger.v("getAndSaveRemoteMovies")
+                    saveMovies(movies)
+                }.doOnComplete { mCacheIsDirty = false }
+//                .subscribeOn(Schedulers.io())
 
         private fun getMovieWithId(movieId: String): MoviesBean.Subjects? {
             if (mCachedMovies.isEmpty()) {

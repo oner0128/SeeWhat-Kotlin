@@ -33,7 +33,9 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         super.onViewCreated(view, savedInstanceState)
         init()
         if (savedInstanceState != null) mFirstLoad = savedInstanceState.getBoolean("firstLoad")
+        Logger.v("mFirstLoad:$mFirstLoad")
         if (mFirstLoad) mPresenter.subscribe()
+        mFirstLoad=false
     }
 
     private var mFirstLoad = true
@@ -42,6 +44,7 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
     private lateinit var mPresenter: InTheatersContract.Presenter
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
+        Logger.v("mFirstLoad:$mFirstLoad")
         outState?.putBoolean("firstLoad", mFirstLoad)
     }
 

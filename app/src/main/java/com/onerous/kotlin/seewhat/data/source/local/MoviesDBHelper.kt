@@ -13,6 +13,8 @@ val DATABASE_VERSION = 1
 
 val DATABASE_NAME = "Moives.db"
 
+private val INTEGER_TYPE = " INTEGER"
+
 private val TEXT_TYPE = " TEXT"
 
 private val DOUBLE_TYPE = " REAL"
@@ -23,7 +25,7 @@ private val UNIQUE = " UNIQUE"
 
 private val SQL_CREATE_INTHEATERS_ENTRIES =
         "CREATE TABLE " + MoviesPersistenceContract.InTheatersEntity.TABLE_NAME + " (" +
-                MoviesPersistenceContract.InTheatersEntity._ID + TEXT_TYPE + " PRIMARY KEY," +
+                MoviesPersistenceContract.InTheatersEntity._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                 MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID + TEXT_TYPE + UNIQUE + COMMA_SEP +
                 MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
                 MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS + TEXT_TYPE + COMMA_SEP +
@@ -37,7 +39,7 @@ private val SQL_CREATE_INTHEATERS_ENTRIES =
 
 private val SQL_CREATE_TOP250_ENTRIES =
         "CREATE TABLE " + MoviesPersistenceContract.Top250Entity.TABLE_NAME + " (" +
-                MoviesPersistenceContract.Top250Entity._ID + TEXT_TYPE + " PRIMARY KEY," +
+                MoviesPersistenceContract.Top250Entity._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                 MoviesPersistenceContract.Top250Entity.COLUMN_MOVIE_ID + TEXT_TYPE + UNIQUE + COMMA_SEP +
                 MoviesPersistenceContract.Top250Entity.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
                 MoviesPersistenceContract.Top250Entity.COLUMN_NAME_DIRECTORS + TEXT_TYPE + COMMA_SEP +

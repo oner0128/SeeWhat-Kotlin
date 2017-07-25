@@ -39,7 +39,7 @@ object ApiService {
     private val CACHE_CONTROL_INTERCEPTOP = Interceptor { chain ->
         val mResponse = chain.proceed(chain.request())
         if (isInternetAvailable(App.instance)) {
-            val maxAge = 5 * 60 // 5分钟在线缓存
+            val maxAge = 10 * 60 // 5分钟在线缓存
             mResponse.newBuilder().removeHeader("Prama")
                     .removeHeader("Cache-Control")
                     .header("Cache-Control", "public, max-age=" + maxAge)
@@ -60,6 +60,6 @@ object ApiService {
     private val okHttpClient = OkHttpClient.Builder().cache(cache)
             .addNetworkInterceptor(CACHE_CONTROL_INTERCEPTOP)
             .addInterceptor(CACHE_CONTROL_INTERCEPTOP)
-            .writeTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(8, TimeUnit.SECONDS)
             .build()
 }

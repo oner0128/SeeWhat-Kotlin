@@ -23,7 +23,7 @@ class MoviesLocalDataSource private constructor(val context: Context) {
     val movieDBHelper = MoviesDBHelper(context)
     val sqlBrite = SqlBrite.Builder().build()
     val db = sqlBrite.wrapDatabaseHelper(movieDBHelper, Schedulers.io());
-    val mMovieMapperFunction = Function<Cursor, MoviesBean.Subjects> { it -> getMovie(it) }
+
     val mLocalInTheaters = LocalInTheaters()
     val mLocalTop250 = LocalTop250()
 
@@ -41,11 +41,42 @@ class MoviesLocalDataSource private constructor(val context: Context) {
     }
 
     inner class LocalInTheaters : MoviesDataSource.LocalInTheaters {
+        init {
+            db.setLoggingEnabled(true)
+        }
 
         val tableName: String = MoviesPersistenceContract.InTheatersEntity.TABLE_NAME
 
         override fun getMovies(): Observable<List<MoviesBean.Subjects>> {
-            return getMovies(tableName)
+            val projection: Array<String> = arrayOf(MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID
+                    , MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE
+//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING
+//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES
+//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS
+//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS
+                    , MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE)
+
+            val sql: String = String.format("SELECT %s FROM %s ",
+                    TextUtils.join(",", projection),
+                    tableName)
+//            val sql: String = String.format("SELECT * FROM %s ",
+//                    tableName)
+            Logger.v("$sql")
+            db.setLoggingEnabled(true)
+            return db.createQuery(tableName, sql)
+                    .mapToList { cursor: Cursor ->
+                        val id = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID))
+                        val title = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE))
+                        val imgUrl_large = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE))
+                        MoviesBean.Subjects(id = id
+                                , title = title
+                                , images = MoviesBean.Subjects.Images(large = imgUrl_large))
+                    }
+                    .take(1)
+//                    .filter { t: MutableList<MoviesBean.Subjects> ->
+//                        Logger.v("${t.size}")
+//                        t.size > 0
+//                    }
         }
 
         override fun getMovie(movieId: String): Observable<MoviesBean.Subjects> {
@@ -78,22 +109,56 @@ class MoviesLocalDataSource private constructor(val context: Context) {
     inner class LocalTop250 : MoviesDataSource.LocalTop250 {
         val tableName: String = MoviesPersistenceContract.Top250Entity.TABLE_NAME
 
+        init {
+            db.setLoggingEnabled(true)
+        }
+
         override fun getMovies(start: Int, count: Int): Observable<List<MoviesBean.Subjects>> {
 //            val sql: String = String.format("SELECT %s FROM %s WHERE %s BETWEEN %s AND %s"
 //                    , TextUtils.join(",", projection)
 //                    , tableName
 //                    , MoviesPersistenceContract.Top250Entity._ID
 //                    , start, count)
-//            val sql: String = String.format("SELECT * FROM %s WHERE %s BETWEEN %s AND %s"
-//                    , tableName
-//                    , MoviesPersistenceContract.Top250Entity._ID
-//                    , start
-//                    , start + count)
-            val sql: String = String.format("SELECT * FROM %s "
-                    , tableName)
+            val sql: String = String.format("SELECT * FROM %s WHERE %s BETWEEN %s AND %s"
+                    , tableName
+                    , MoviesPersistenceContract.Top250Entity._ID
+                    , start+1
+                    , start + count)
+//            val sql: String = String.format("SELECT * FROM %s "
+//                    , tableName)
             Logger.v("getMovies: $sql")
-            return db.createQuery(tableName, sql)
-                    .mapToList(mMovieMapperFunction)
+
+            var movies = db.createQuery(tableName, sql)
+                    .mapToList { cursor ->
+                        val id = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID))
+//                    Logger.v("id:$id")
+                        val title = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE))
+                        val years = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_YEARS))
+                        val rating = cursor.getDouble(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING))
+                        val imgUrl_large = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE))
+                        val imgUrl_medium = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_MEDIUM))
+                        val genres = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES))
+                                .split("/")
+                        val casts = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS))
+                                .split("/").map { it -> MoviesBean.Subjects.Casts(name = it) }.toList()
+                        val directors = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS))
+                                .split("/").map { it -> MoviesBean.Subjects.Directors(name = it) }.toList()
+                        MoviesBean.Subjects(
+                                rating = MoviesBean.Subjects.Rating(average = rating)
+                                , title = title
+                                , images = MoviesBean.Subjects.Images(medium = imgUrl_medium, large = imgUrl_large)
+                                , year = years, id = id
+                                , genres = genres, casts = casts, directors = directors)
+
+                    }
+//                    .filter { movies ->
+//                        Logger.v("LocalTop250:size-${movies.size}")
+//                        movies.size >= count
+//                    }
+                    .take(1)
+//            val count = movies.count().subscribe({ it -> Logger.v("$it") }, { e -> Logger.v("${e.toString()}") })
+
+            return movies
         }
 
         override fun getMovie(movieId: String): Observable<MoviesBean.Subjects> {
@@ -123,46 +188,6 @@ class MoviesLocalDataSource private constructor(val context: Context) {
 
     }
 
-    private fun getMovie(cursor: Cursor): MoviesBean.Subjects {
-        val id = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID))
-        val title = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE))
-
-        val years = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_YEARS))
-        val rating = cursor.getDouble(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING))
-        val imgUrl_large = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE))
-        val imgUrl_medium = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_MEDIUM))
-        val genres = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES))
-                .split("/")
-        val casts = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS))
-                .split("/").map { it -> MoviesBean.Subjects.Casts(name = it) }.toList()
-        val directors = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS))
-                .split("/").map { it -> MoviesBean.Subjects.Directors(name = it) }.toList()
-        return MoviesBean.Subjects(
-                rating = MoviesBean.Subjects.Rating(average = rating)
-                , title = title
-                , images = MoviesBean.Subjects.Images(medium = imgUrl_medium, large = imgUrl_large)
-                , year = years, id = id
-                , genres = genres, casts = casts, directors = directors)
-    }
-
-    fun getMovies(tableName: String): Observable<List<MoviesBean.Subjects>> {
-//        val projection: Array<String> = arrayOf(MoviesPersistenceContract.InTheatersEntity._ID
-//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE
-//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_RATING
-//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_GENRES
-//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_DIRECTORS
-//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_NAME_CASTS
-//                , MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE)
-
-//        val sql: String = String.format("SELECT %s FROM %s ",
-//                TextUtils.join(",", projection),
-//                tableName)
-        val sql: String = String.format("SELECT * FROM %s ",
-                tableName)
-        return db.createQuery(tableName, sql)
-                .mapToList(mMovieMapperFunction)
-    }
-
     fun getMovie(tableName: String, movieId: String): Observable<MoviesBean.Subjects> {
         val projection: Array<String> = arrayOf(MoviesPersistenceContract.InTheatersEntity._ID
                 , MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE
@@ -175,8 +200,16 @@ class MoviesLocalDataSource private constructor(val context: Context) {
         val sql: String = String.format("SELECT %s FROM %s  WHERE %s LIKE ? ",
                 TextUtils.join(",", projection),
                 tableName, MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID)
+        Logger.v("$sql")
         return db.createQuery(tableName, sql, movieId)
-                .mapToOne(mMovieMapperFunction)
+                .mapToOne { cursor: Cursor ->
+                    val id = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_MOVIE_ID))
+                    val title = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_TITLE))
+                    val imgUrl_large = cursor.getString(cursor.getColumnIndexOrThrow(MoviesPersistenceContract.InTheatersEntity.COLUMN_IMAGE_URL_LARGE))
+                    MoviesBean.Subjects(id = id
+                            , title = title
+                            , images = MoviesBean.Subjects.Images(large = imgUrl_large))
+                }
     }
 
     fun saveMovies(tableName: String, movies: List<MoviesBean.Subjects>) {

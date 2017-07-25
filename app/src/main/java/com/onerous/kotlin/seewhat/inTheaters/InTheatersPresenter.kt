@@ -21,7 +21,7 @@ class InTheatersPresenter(val view: InTheatersContract.View) : InTheatersContrac
     }
 
     override fun unsubscribe() {
-        mCompositeDisposable.clear()
+        mCompositeDisposable.dispose()
     }
 
     override fun loadInTheatersMovies(forceUpdate: Boolean) {
@@ -33,10 +33,9 @@ class InTheatersPresenter(val view: InTheatersContract.View) : InTheatersContrac
         mCompositeDisposable.clear()
         val disposable = mMoviesRepository
                 .getMovies()
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it ->
-                    Logger.v("${it.size}")
+                    Logger.v("loadInTheatersMovies-size:${it.size}")
                     view.showMovies(it) }
                         , { error -> view.showError(error.toString()) }
                         , { view.hideProgressDialog() })
