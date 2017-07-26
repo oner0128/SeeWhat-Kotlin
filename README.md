@@ -10,10 +10,8 @@ You can use it to read Douban intheaters, Douban Top250 && Zhihu Daily, and lear
 Welcome to Star or Fork！
 
 ## Screenshots
-
-
-## Gif Preview
-
+<img src="https://user-images.githubusercontent.com/7570947/28606253-a2634786-7208-11e7-956c-27d4642b593f.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606254-a26669b6-7208-11e7-8394-ef26c95e7b47.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606252-a263001e-7208-11e7-8ec3-5a59e31a591c.png" width="250" height="444"/>
+<img src="https://user-images.githubusercontent.com/7570947/28606256-a272acf8-7208-11e7-8d69-bc7f5d22a85f.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606255-a26bf304-7208-11e7-820a-431e191f30c8.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606257-a273604e-7208-11e7-866e-79794ffc1bc5.png" width="250" height="444"/>
 
 ## Thanks
 Thanks to these projects and libraries:
