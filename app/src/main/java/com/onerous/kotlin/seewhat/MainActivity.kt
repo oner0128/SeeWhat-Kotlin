@@ -6,6 +6,9 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
+import android.view.Menu
+import com.onerous.kotlin.seewhat.detailActivity.SearchActivity
 import com.onerous.kotlin.seewhat.inTheaters.InTheatersFragment
 import com.onerous.kotlin.seewhat.inTheaters.Top250Fragment
 import com.onerous.kotlin.seewhat.zhihu.ZhihuFragment
@@ -80,5 +83,32 @@ class MainActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.addCategory(Intent.CATEGORY_HOME)
         startActivity(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        // Get the SearchView and set the searchable configuration
+        //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        val mSearchView :SearchView = menu.findItem(R.id.search_view).actionView as SearchView
+        // Assumes current activity is the searchable activity
+        //        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconifiedByDefault(true) // Do not iconify the widget; expand it by default
+        mSearchView.setQueryHint("影片名称...")
+        mSearchView.setSubmitButtonEnabled(true)
+        mSearchView.setQueryRefinementEnabled(true)
+        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                val intent = Intent(applicationContext, SearchActivity::class.java)
+                intent.putExtra("SearchString", query)
+                startActivity(intent)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+        return true
     }
 }

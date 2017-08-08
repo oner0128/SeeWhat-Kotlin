@@ -19,4 +19,7 @@ interface DouBanService {
 
     @GET("subject/{id}")
     fun getMovieDetail(@Path("id") id: String): Observable<MovieDetailBean>
+
+    @GET("search")
+    fun getSearchMovies(@Query("q") movieNameOrPeople: String, @Query("start") start: Int, @Query("count") count: Int): Observable<MoviesBean>
 }

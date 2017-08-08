@@ -49,7 +49,7 @@ data class MovieDetailBean(var rating: Rating,
 
         override fun getJob(): String = "演员"
 
-        override fun getImgUrl(): String = avatars.medium
+        override fun getImgUrl(): String = avatars?.medium
 
         data class Avatars(var small: String,
                            var large: String,
@@ -66,7 +66,7 @@ data class MovieDetailBean(var rating: Rating,
 
         override fun getJob(): String = "导演"
 
-        override fun getImgUrl(): String = avatars.medium
+        override fun getImgUrl(): String = avatars?.medium
 
         data class Avatars(var small: String,
                            var large: String,

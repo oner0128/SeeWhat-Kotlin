@@ -129,8 +129,8 @@ class MovieDetailActivity : AppCompatActivity() {
         MovieUrl = movieDetailBean.mobile_url
         share = movieDetailBean.original_title + '\n' + movieDetailBean.mobile_url
         //cast &director
-        persons.addAll(movieDetailBean.directors)
-        persons.addAll(movieDetailBean.casts)
+        if (movieDetailBean.directors!=null)persons.addAll(movieDetailBean.directors)
+        if (movieDetailBean.casts!=null)persons.addAll(movieDetailBean.casts)
 
         adapter.notifyDataSetChanged()
     }
