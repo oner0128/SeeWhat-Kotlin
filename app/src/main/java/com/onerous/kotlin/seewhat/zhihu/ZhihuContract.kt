@@ -12,7 +12,6 @@ interface ZhihuContract {
     interface View : BaseView {
         fun showLastestNews(zhihuLatestNewsBean: ZhihuLatestNewsBean)
         fun showBeforeNews(zhihuBeforeNewsBean: ZhihuBeforeNewsBean)
-        fun showNewsDetail()
     }
 
     interface Presenter : BasePresenter {

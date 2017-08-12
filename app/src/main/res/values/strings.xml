@@ -13,4 +13,9 @@
     <string name="action_moreinfo">更多信息</string>
     <string name="no_more_movie">无更多电影</string>
     <string name="somthing_wrong">加载失败，点击重试</string>
+    <string name="hideorshow_fab_to_top_behavior">com.onerous.kotlin.seewhat.util.HideOrShowFabToTopBehavior</string>
+    <string name="hideorshow_bottom_behavior">com.onerous.kotlin.seewhat.util.HideOrShowBottomBehavior</string>
+    <string name="hideorshow_title_behavior">com.onerous.kotlin.seewhat.util.HideOrShowTitleBehavior</string>
+    <string name="hideorshow_fab_behavior">com.onerous.kotlin.seewhat.util.HideOrShowFabBehavior</string>
+    <string name="title_activity_search">搜索</string>
 </resources>

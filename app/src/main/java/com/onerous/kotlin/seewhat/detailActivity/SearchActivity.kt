@@ -1,11 +1,15 @@
 package com.onerous.kotlin.seewhat.detailActivity
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SearchView
+import android.transition.Fade
+import android.transition.Slide
+import android.view.Menu
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -28,30 +32,33 @@ class SearchActivity : AppCompatActivity() {
     private var total = 20
     private val mData = ArrayList<MoviesBean.Subjects>()
     private val mAdapter = SearchAdapter(R.layout.item_recyclerview_top250, mData)
+    var searchString: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        setSupportActionBar(toolbar)
 
-        val searchString = intent.getStringExtra("SearchString")
-        getSearchMovies(searchString, start, count)
-
-        recycler_search.layoutManager=LinearLayoutManager(applicationContext)
-        recycler_search.adapter=mAdapter
+        recycler_search.layoutManager = LinearLayoutManager(applicationContext)
+        recycler_search.adapter = mAdapter
         mAdapter.setOnLoadMoreListener(
                 {
-                    //                    Handler().postDelayed({
-                    Logger.v("start load more$start")
                     if (start < total) {
-                        getSearchMovies(searchString, start, count)
-                    } else Toast.makeText(applicationContext, "no more items", Toast.LENGTH_LONG).show()
-//                    }, 1000)
+                        if (searchString != null) getSearchMovies(searchString!!, start, count)
+                    } else {
+                        Toast.makeText(this, "no more items", Toast.LENGTH_LONG).show()
+                        mAdapter.loadMoreEnd()
+                    }
                 }
                 , recycler_search)
-
+        mAdapter.disableLoadMoreIfNotFullPage()
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
             adapter, view, position ->
             Logger.v("onItemClickListener:$position")
             showMovieDetail(mData.get(position))
+        }
+        fab_to_top.setOnClickListener {
+            fab_to_top.visibility = View.INVISIBLE
+            recycler_search.scrollToPosition(0)
         }
     }
 
@@ -70,21 +77,24 @@ class SearchActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                        bean: MoviesBean ->  loadSearchData(bean)
+                    bean: MoviesBean ->
+                    loadSearchData(bean)
                 }, { showProgressDialog() }, { hideProgressDialog() }, { showProgressDialog() })
     }
 
-     fun loadSearchData(moviesBean: MoviesBean){
-         total=moviesBean.total
-         mData.addAll(moviesBean.subjects)
-         start=mData.size
-         mAdapter.notifyDataSetChanged()
-         mAdapter.loadMoreComplete()
-     }
+    fun loadSearchData(moviesBean: MoviesBean) {
+        total = moviesBean.total
+        mData.addAll(moviesBean.subjects)
+        start = mData.size
+        mAdapter.setEnableLoadMore(true)
+        mAdapter.loadMoreComplete()
+    }
 
     fun showProgressDialog() {
-        if (start==0){progressBar.setVisibility(View.VISIBLE)
-        recycler_search.setVisibility(View.INVISIBLE)}
+        if (start == 0) {
+            progressBar.setVisibility(View.VISIBLE)
+            recycler_search.setVisibility(View.INVISIBLE)
+        }
     }
 
     fun hideProgressDialog() {
@@ -113,5 +123,32 @@ class SearchActivity : AppCompatActivity() {
 
             helper.setText(R.id.tv_genres, "类型:${formatListToString(item.genres)}")
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_search, menu)
+        // Get the SearchView and set the searchable configuration
+        //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        val mSearchView: SearchView = menu.findItem(R.id.search_view).actionView as SearchView
+
+        mSearchView.setIconifiedByDefault(false) // false:默认展开搜索栏
+        mSearchView.setQueryHint("影片名称...")
+        mSearchView.setSubmitButtonEnabled(true)
+        mSearchView.setQueryRefinementEnabled(true)
+        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                start = 0
+                mData.clear()
+                searchString=query
+                getSearchMovies(query, start, count)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+        return true
     }
 }

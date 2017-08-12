@@ -17,13 +17,13 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name=".detailActivity.ZhihuStoryDetailActivity"
             android:label="@string/title_activity_zhihu_story_detail"
@@ -32,7 +32,9 @@
             android:name=".detailActivity.MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".detailActivity.SearchActivity"></activity>
+        <activity android:name=".detailActivity.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -41,7 +41,8 @@
         android:id="@+id/fab_scrolling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin_end"
+        android:layout_marginRight="@dimen/fab_margin_end"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_share_white_24dp" />

@@ -15,16 +15,19 @@ android {
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        multiDexEnabled true
     }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions {
-        exclude 'META-INF/rxjava.properties'
-    }
+//    packagingOptions {
+//        exclude 'META-INF/rxjava.properties'
+//    }
 }
 
 dependencies {
@@ -64,9 +67,8 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-banner:2.1.7@aar'
     //logger
     implementation 'com.orhanobut:logger:2.1.1'
-    //hide bottom
-    implementation 'com.github.githubwing:ByeBurger:1.2.3'
-    //anko
-//    compile "org.jetbrains.anko:anko:0.10.1"
+    //leakcanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
 }

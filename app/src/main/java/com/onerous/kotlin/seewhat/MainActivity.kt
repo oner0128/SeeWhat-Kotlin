@@ -1,13 +1,14 @@
 package com.onerous.kotlin.seewhat
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
-import android.view.Menu
+import android.view.View
 import com.onerous.kotlin.seewhat.detailActivity.SearchActivity
 import com.onerous.kotlin.seewhat.inTheaters.InTheatersFragment
 import com.onerous.kotlin.seewhat.inTheaters.Top250Fragment
@@ -16,9 +17,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val mInTheaterFragment: Fragment by lazy { InTheatersFragment.NewInstance() }
-    private val mZhihuFragment: Fragment  by lazy { ZhihuFragment.NewInstance() }
-    private val mTop250Fragment: Fragment  by lazy { Top250Fragment.NewInstance() }
+    private val mInTheaterFragment: InTheatersFragment? by lazy { InTheatersFragment.NewInstance() }
+    private val mZhihuFragment: ZhihuFragment?  by lazy { ZhihuFragment.NewInstance() }
+    private val mTop250Fragment: Top250Fragment?  by lazy { Top250Fragment.NewInstance() }
     private var currentFragment: Fragment? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -46,16 +47,40 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(toolbar)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         supportActionBar?.setTitle(R.string.toolbar_title_intheater)
 
 
         currentFragment = supportFragmentManager.findFragmentById(R.id.container)
         if (currentFragment == null) addorShowFragmentToActivity(supportFragmentManager, R.id.container, mInTheaterFragment)
+
+        fab_search.setOnClickListener {
+            val intent = Intent(applicationContext, SearchActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+
+    fun hideFabToTop(view: View) {
+
+        val animator = view.animate()
+                .translationY(view.height.toFloat() + view.bottom.toFloat())
+                .setDuration(500)
+
+        animator.setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                com.orhanobut.logger.Logger.v("animator end")
+                view.visibility = View.INVISIBLE
+            }
+        })
+
+        animator.start()
     }
 
     fun addorShowFragmentToActivity(fragmentManager: FragmentManager,
-                                    frameId: Int, fragment: Fragment) {
+                                    frameId: Int, fragment: Fragment?) {
+        if (fragment == null) return
         if (currentFragment == null) {
             addFragmentToActivity(supportFragmentManager, R.id.container, fragment)
             currentFragment = fragment
@@ -71,44 +96,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addFragmentToActivity(fragmentManager: FragmentManager,
-                              frameId: Int, fragment: Fragment) {
-
+                              frameId: Int, fragment: Fragment?) {
+        if (fragment == null) return
         val transaction = fragmentManager.beginTransaction()
         transaction.add(frameId, fragment)
         transaction.commit()
     }
 
-    override fun onBackPressed() {
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.addCategory(Intent.CATEGORY_HOME)
-        startActivity(intent)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        // Get the SearchView and set the searchable configuration
-        //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        val mSearchView :SearchView = menu.findItem(R.id.search_view).actionView as SearchView
-        // Assumes current activity is the searchable activity
-        //        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        mSearchView.setIconifiedByDefault(true) // Do not iconify the widget; expand it by default
-        mSearchView.setQueryHint("影片名称...")
-        mSearchView.setSubmitButtonEnabled(true)
-        mSearchView.setQueryRefinementEnabled(true)
-        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                val intent = Intent(applicationContext, SearchActivity::class.java)
-                intent.putExtra("SearchString", query)
-                startActivity(intent)
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
-            }
-        })
-        return true
-    }
+//    override fun onBackPressed() {
+//        val intent = Intent(Intent.ACTION_MAIN)
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//        intent.addCategory(Intent.CATEGORY_HOME)
+//        startActivity(intent)
+//    }
 }

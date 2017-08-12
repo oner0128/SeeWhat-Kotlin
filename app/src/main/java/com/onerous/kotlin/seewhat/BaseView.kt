@@ -7,4 +7,5 @@ interface BaseView {
     fun showProgressDialog()
     fun hideProgressDialog()
     fun showError(error:String?)
+    fun scrollToTop()
 }

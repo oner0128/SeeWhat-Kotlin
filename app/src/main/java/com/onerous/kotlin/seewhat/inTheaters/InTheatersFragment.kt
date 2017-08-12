@@ -3,7 +3,6 @@ package com.onerous.kotlin.seewhat.inTheaters
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -20,33 +19,27 @@ import kotlinx.android.synthetic.main.fragment_in_theaters.*
  * Created by rrr on 2017/7/15.
  */
 class InTheatersFragment : Fragment(), InTheatersContract.View {
-
-    private object SingletonHolder {
-        val Instance = InTheatersFragment()
+    override fun scrollToTop() {
+        recyclerView_intheaters.smoothScrollToPosition(0)
     }
 
+    private object SingletonHolder {
+        var Instance :InTheatersFragment?= InTheatersFragment()
+    }
+    
     companion object {
-        fun NewInstance(): InTheatersFragment = SingletonHolder.Instance
+        fun NewInstance(): InTheatersFragment? = SingletonHolder.Instance
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        if (savedInstanceState != null) mFirstLoad = savedInstanceState.getBoolean("firstLoad")
-        Logger.v("mFirstLoad:$mFirstLoad")
-        if (mFirstLoad) mPresenter.subscribe()
-        mFirstLoad=false
     }
 
-    private var mFirstLoad = true
     private var mDatas: ArrayList<MoviesBean.Subjects> = ArrayList()
     private lateinit var mAdapter: InTheatersAdapter
     private lateinit var mPresenter: InTheatersContract.Presenter
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        Logger.v("mFirstLoad:$mFirstLoad")
-        outState?.putBoolean("firstLoad", mFirstLoad)
-    }
+
 
     fun init() {
         layout_noMovies.visibility = View.INVISIBLE
@@ -59,7 +52,6 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         swipeRefreshLayout_intheaters.setColorSchemeResources(R.color.blue_primary_dark, R.color.blue_primary_light, R.color.yellow_primary_dark)
         //listener
         swipeRefreshLayout_intheaters.setOnRefreshListener {
-            Logger.v("swipeRefreshLayout_intheaters:setOnRefreshListener")
             mPresenter.loadInTheatersMovies(false)
         }
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adaptet, view, position ->
@@ -92,9 +84,15 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         mAdapter.notifyDataSetChanged()
     }
 
+    override fun onResume() {
+        super.onResume()
+        mPresenter.subscribe()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         mPresenter.unsubscribe()
+        SingletonHolder.Instance=null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -104,10 +102,11 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
     override fun showMovieDetail(movie: MoviesBean.Subjects?) {
         if (movie == null) return
         val intent = Intent(context, MovieDetailActivity::class.java)
-        Logger.v("movieTitle:${movie.images.large}")
+//        Logger.v("movieTitle:${movie.images.large}")
         intent.putExtra("MovieId", movie.id)
         intent.putExtra("MovieTitle", movie.title)
         intent.putExtra("MovieImg", movie.images.large)
+
         startActivity(intent)
     }
 }

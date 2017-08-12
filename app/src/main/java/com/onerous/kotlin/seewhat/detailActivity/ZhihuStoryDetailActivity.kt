@@ -1,8 +1,12 @@
 package com.onerous.kotlin.seewhat.detailActivity
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.transition.Fade
+import android.transition.Slide
 import android.view.MenuItem
+import android.view.Window
 import android.webkit.WebSettings
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -23,9 +27,9 @@ class ZhihuStoryDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_zhihu_story_detail)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true);//设置toolbar返回键
-
+        
         val bundle: Bundle = intent.getBundleExtra("story")
-        supportActionBar?.title=bundle.getString("storyTitle")
+        supportActionBar?.title = bundle.getString("storyTitle")
 
         val settings = wv_content.getSettings()
         settings.setJavaScriptEnabled(true)

@@ -3,14 +3,15 @@ package com.onerous.kotlin.seewhat.detailActivity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.transition.Fade
+import android.transition.Slide
+import android.view.*
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -129,8 +130,8 @@ class MovieDetailActivity : AppCompatActivity() {
         MovieUrl = movieDetailBean.mobile_url
         share = movieDetailBean.original_title + '\n' + movieDetailBean.mobile_url
         //cast &director
-        if (movieDetailBean.directors!=null)persons.addAll(movieDetailBean.directors)
-        if (movieDetailBean.casts!=null)persons.addAll(movieDetailBean.casts)
+        if (movieDetailBean.directors != null) persons.addAll(movieDetailBean.directors)
+        if (movieDetailBean.casts != null) persons.addAll(movieDetailBean.casts)
 
         adapter.notifyDataSetChanged()
     }
@@ -142,7 +143,7 @@ class MovieDetailActivity : AppCompatActivity() {
         rv_casts.adapter = adapter
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            showCustomTabs("https://movie.douban.com/celebrity/${persons.get(position).getPersonId()}/mobile",baseContext)
+            showCustomTabs("https://movie.douban.com/celebrity/${persons.get(position).getPersonId()}/mobile", baseContext)
         }
     }
 

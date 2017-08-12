@@ -6,11 +6,23 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.onerous.kotlin.seewhat.MainActivity">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
     <FrameLayout
         android:id="@id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"></FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
@@ -18,10 +30,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
+        android:background="@color/colorPrimary"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
         android:elevation="2dp"
         android:translationZ="2dp"
-        app:layout_behavior="@string/bye_burger_bottom_behavior"
+        app:layout_behavior="@string/hideorshow_bottom_behavior"
         app:menu="@menu/navigation" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginEnd="@dimen/fab_margin_end"
+        android:layout_marginRight="@dimen/fab_margin_end"
+        app:layout_behavior="@string/hideorshow_fab_behavior"
+        app:srcCompat="@drawable/ic_search_white_24dp" />
 </android.support.design.widget.CoordinatorLayout>

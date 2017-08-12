@@ -16,7 +16,8 @@
     <dimen name="app_bar_movie_detail_height">310dp</dimen>
     <dimen name="text_margin">8dp</dimen>
     <dimen name="text_margin_vertical">4dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_margin_bottom">65dp</dimen>
+    <dimen name="fab_margin_end">15dp</dimen>
     <dimen name="space_260">260dp</dimen>
     <dimen name="space_10">10dp</dimen>
     <dimen name="space_15">15dp</dimen>

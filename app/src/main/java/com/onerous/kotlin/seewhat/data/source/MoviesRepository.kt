@@ -46,7 +46,7 @@ class MoviesRepository private constructor(context: Context) {
         override fun getMovies(): Observable<List<MoviesBean.Subjects>> {
             // Respond immediately with cache if available and not dirty
             if (!mCacheIsDirty && mCachedMovies.isNotEmpty()) {
-                Logger.v("from cache")
+//                Logger.v("from cache")
                 return Observable.fromIterable(mCachedMovies.values)
                         .subscribeOn(Schedulers.computation())
                         .toList().toObservable()

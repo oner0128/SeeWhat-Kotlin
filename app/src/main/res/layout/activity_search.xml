@@ -1,22 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:id="@+id/layout_search"
-app:layout_behavior="@string/appbar_scrolling_view_behavior"
-tools:context="com.onerous.kotlin.seewhat.detailActivity.SearchActivity">
-<ProgressBar
-    android:id="@+id/progressBar"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_search"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"/>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recycler_search"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/activity_background"
-    android:scrollbars="vertical" />
-</FrameLayout>
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.onerous.kotlin.seewhat.detailActivity.SearchActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_gravity="center" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@color/activity_background"
+        android:scrollbars="vertical" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_to_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginEnd="@dimen/fab_margin_end"
+        android:layout_marginRight="@dimen/fab_margin_end"
+        android:visibility="invisible"
+        app:layout_behavior="@string/hideorshow_fab_to_top_behavior"
+        app:srcCompat="@drawable/ic_vertical_align_top_black_24dp" />
+</android.support.design.widget.CoordinatorLayout>
 

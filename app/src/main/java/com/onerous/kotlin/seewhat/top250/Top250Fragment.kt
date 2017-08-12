@@ -3,7 +3,6 @@ package com.onerous.kotlin.seewhat.inTheaters
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -23,20 +22,23 @@ import kotlinx.android.synthetic.main.fragment_top250.*
  * Created by rrr on 2017/7/15.
  */
 class Top250Fragment : Fragment(), Top250Contract.View {
-    private var mFirstLoad = true
+    override fun scrollToTop() {
+        recyclerView_top250.smoothScrollToPosition(0)
+    }
+
     var start = 0
-    var count = 10
+    var count = 20
     var total = 250
     private var mDatas: ArrayList<MoviesBean.Subjects> = ArrayList()
     private lateinit var mAdapter: Top250Adapter
     private lateinit var mPresenter: Top250Contract.Presenter
 
     private object SingletonHolder {
-        val Instance = Top250Fragment()
+        var Instance:Top250Fragment? = Top250Fragment()
     }
 
     companion object {
-        fun NewInstance(): Top250Fragment = SingletonHolder.Instance
+        fun NewInstance(): Top250Fragment? = SingletonHolder.Instance
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,19 +48,17 @@ class Top250Fragment : Fragment(), Top250Contract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        if (savedInstanceState != null) mFirstLoad = savedInstanceState.getBoolean("firstLoad")
-        if (mFirstLoad) mPresenter.subscribe()
-        mFirstLoad=false
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.putBoolean("firstLoad", mFirstLoad)
+    override fun onResume() {
+        super.onResume()
+        mPresenter.subscribe()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mPresenter.unsubscribe()
+        SingletonHolder.Instance=null
     }
 
     override fun showMovies(movies: List<MoviesBean.Subjects>) {
@@ -94,11 +94,11 @@ class Top250Fragment : Fragment(), Top250Contract.View {
 
         mAdapter.setOnLoadMoreListener(
                 {
-//                    Handler().postDelayed({
-                        Logger.v("start load more$start")
-                        if (start < total) {
-                            mPresenter.loadTop250Movies(false, start, count)
-                        } else showNoMovies()
+                    //                    Handler().postDelayed({
+//                    Logger.v("start load more$start")
+                    if (start < total) {
+                        mPresenter.loadTop250Movies(false, start, count)
+                    } else showNoMovies()
 //                    }, 1000)
                 }
                 , recyclerView_top250)
@@ -107,7 +107,7 @@ class Top250Fragment : Fragment(), Top250Contract.View {
 
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
             adapter, view, position ->
-            Logger.v("onItemClickListener:$position")
+//            Logger.v("onItemClickListener:$position")
             showMovieDetail(mDatas.get(position))
         }
     }
@@ -135,7 +135,7 @@ class Top250Fragment : Fragment(), Top250Contract.View {
 
     override fun showNoMovies() {
         Toast.makeText(context, R.string.no_more_movie, Toast.LENGTH_LONG).show();
-        mAdapter.loadMoreComplete();
+        mAdapter.loadMoreEnd();
     }
 
     override fun showMovieDetail(movie: MoviesBean.Subjects?) {

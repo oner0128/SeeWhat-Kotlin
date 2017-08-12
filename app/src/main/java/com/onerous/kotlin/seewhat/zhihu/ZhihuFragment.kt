@@ -20,24 +20,22 @@ import java.util.*
  * Created by rrr on 2017/7/17.
  */
 class ZhihuFragment : Fragment(), ZhihuContract.View {
-    override fun showNewsDetail() {
-//        Logger.d(storiesEntity.title)
-//            val intent = Intent(mContext, ZhihuStoryDetailActivity::class.java)
-//            val bundle= Bundle()
-//            bundle.putInt("storyId", storiesEntity.id)
-//            bundle.putString("storyTitle", storiesEntity.title)
-//            intent.putExtra("story",bundle)
-//            mContext.startActivity(intent)
+    override fun scrollToTop() {
+        recyclerView_zhihu.smoothScrollToPosition(0)
     }
 
     private object SingletonHolder {
-        val Instance = ZhihuFragment()
+        var Instance : ZhihuFragment?= ZhihuFragment()
     }
 
     companion object {
-        fun NewInstance(): ZhihuFragment = SingletonHolder.Instance
+        fun NewInstance(): ZhihuFragment? = SingletonHolder.Instance
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        SingletonHolder.Instance=null
+    }
     private var mPresenter: ZhihuContract.Presenter = ZhihuPresenter(this)
     private var mDatas = ArrayList<ZhihuMultiItem>()
     private var mAdapter: ZhihuAdapter? = null

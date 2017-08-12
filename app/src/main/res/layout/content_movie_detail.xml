@@ -36,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
+                android:paddingTop="5dp"
                 android:numStars="5" />
 
             <LinearLayout
