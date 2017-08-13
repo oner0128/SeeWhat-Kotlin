@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">SeeWhat</string>
-    <string name="title_activity_main">正在热映</string>
+    <string name="app_name">SeeWhat-kotlin</string>
     <string name="title_intheater">inTheaters</string>
     <string name="toolbar_title_intheater">正在热映</string>
     <string name="title_top250">Top250</string>
