@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/navigation_intheater"
-        android:icon="@drawable/ic_intheaters_black_24dp"
+        android:icon="@drawable/ic_theaters_black_24dp"
         android:title="@string/title_intheater" />
 
     <item
@@ -13,7 +13,12 @@
 
     <item
         android:id="@+id/navigation_zhihu"
-        android:icon="@drawable/ic_zhihu_black_24dp"
+        android:icon="@drawable/ic_zhihu_24dp"
         android:title="@string/title_zhihu" />
+    
+    <item
+        android:id="@+id/navigation_meizi"
+        android:icon="@drawable/ic_girl_24dp"
+        android:title="@string/title_meizi" />
 
 </menu>

@@ -11,4 +11,5 @@
     <color name="yellow_primary_dark">#FFA000</color>
     <color name="colorLightGray">#E0E0E0</color>
     <color name="transparent_white">#00FFFFFF</color>
+    <color name="black">#FF000000</color>
 </resources>

@@ -17,7 +17,14 @@ import java.util.concurrent.TimeUnit
  */
 
 object ApiService {
-
+    val gankService: GankService by lazy {
+        Retrofit.Builder()
+                .baseUrl(BASE_GANK_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient).build().create(GankService::class.java)
+    }
+    
     val douBanService: DouBanService by lazy {
         Retrofit.Builder()
                 .baseUrl(BASE_MOVIE_URL)
@@ -35,6 +42,7 @@ object ApiService {
     }
 
     val BASE_MOVIE_URL = "https://api.douban.com/v2/movie/"
+    val BASE_GANK_URL = "https://gank.io/"
     val BASE_ZHIHU_URL = "https://news-at.zhihu.com/api/4/"
     private val CACHE_CONTROL_INTERCEPTOP = Interceptor { chain ->
         val mResponse = chain.proceed(chain.request())

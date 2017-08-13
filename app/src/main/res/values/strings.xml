@@ -18,4 +18,6 @@
     <string name="hideorshow_title_behavior">com.onerous.kotlin.seewhat.util.HideOrShowTitleBehavior</string>
     <string name="hideorshow_fab_behavior">com.onerous.kotlin.seewhat.util.HideOrShowFabBehavior</string>
     <string name="title_activity_search">搜索</string>
+    <string name="title_meizi">Meizi</string>
+    <string name="toolbar_title_meizi">福利</string>
 </resources>
