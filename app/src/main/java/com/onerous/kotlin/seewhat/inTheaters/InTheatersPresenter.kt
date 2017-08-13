@@ -26,7 +26,7 @@ class InTheatersPresenter(val view: InTheatersContract.View) : InTheatersContrac
 
     override fun loadInTheatersMovies(forceUpdate: Boolean) {
         if (forceUpdate) {
-            Logger.v("$forceUpdate")
+//            Logger.v("$forceUpdate")
             mMoviesRepository.refreshMovies()
         }
         view.showProgressDialog()
@@ -35,7 +35,7 @@ class InTheatersPresenter(val view: InTheatersContract.View) : InTheatersContrac
                 .getMovies()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it ->
-                    Logger.v("loadInTheatersMovies-size:${it.size}")
+//                    Logger.v("loadInTheatersMovies-size:${it.size}")
                     view.showMovies(it) }
                         , { error -> view.showError(error.toString()) }
                         , { view.hideProgressDialog() })

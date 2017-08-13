@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#B65A4B</color>
     <color name="colorAccent">#E37264</color>
     <color name="activity_background">#EEEEEE</color>
-    <color name="white">#FFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
     <!--swipeRefreshLayout color-->
     <color name="blue_primary_light">#03A9F4</color>
     <color name="blue_primary_dark">#1976D2</color>

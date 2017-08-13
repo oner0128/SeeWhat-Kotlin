@@ -2,8 +2,11 @@ package com.onerous.kotlin.seewhat.meizi
 
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +16,17 @@ import com.onerous.kotlin.seewhat.R
 import com.onerous.kotlin.seewhat.data.MeiziBean
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_meizi.*
+import kotlinx.android.synthetic.main.item_recyclerview_meizi.*
+
 
 /**
  * Created by oner0128 on 2017/8/12.
  */
 class MeiziFragment : Fragment(), MeiziContract.View {
     override fun showMeizi(meizi: List<MeiziBean.Results>) {
+        if (meizi.size==0){
+            mAdapter.loadMoreEnd()
+        }
         mDatas.addAll(meizi)
         swipeRefreshLayout_meizi.isRefreshing = false
         mAdapter.loadMoreComplete()
@@ -28,7 +36,7 @@ class MeiziFragment : Fragment(), MeiziContract.View {
     override fun scrollToTop() {
         recyclerView_meizi.smoothScrollToPosition(0)
     }
-    
+
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +66,7 @@ class MeiziFragment : Fragment(), MeiziContract.View {
         mAdapter.setOnLoadMoreListener({
             mPresenter.loadMeizis(++page)
         }, recyclerView_meizi)
-        
+
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adaptet, view, position ->
             showMeiziDetail(mDatas.get(position))
         }
@@ -66,8 +74,16 @@ class MeiziFragment : Fragment(), MeiziContract.View {
     }
 
     fun showMeiziDetail(meizi: MeiziBean.Results) {
-        val intent=Intent(context,MeiziPictureActivity::class.java)
-        intent.putExtra("meiziUrl",meizi.url)
+        val intent = Intent(context, MeiziPictureActivity::class.java)
+        intent.putExtra("meiziUrl", meizi.url)
+        intent.putExtra("id", meizi._id)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                    activity,
+//                    iv_item_meizi,
+//                    resources.getString(R.string.simple_activity_transition))
+//            startActivity(intent, options.toBundle())
+//        } else startActivity(intent)
         startActivity(intent)
     }
 
@@ -78,7 +94,7 @@ class MeiziFragment : Fragment(), MeiziContract.View {
 
 
     override fun showProgressDialog() {
-        swipeRefreshLayout_meizi.isRefreshing = true
+        if (page==0)swipeRefreshLayout_meizi.isRefreshing = true
     }
 
     override fun hideProgressDialog() {

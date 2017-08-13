@@ -20,4 +20,5 @@
     <string name="title_activity_search">搜索</string>
     <string name="title_meizi">Meizi</string>
     <string name="toolbar_title_meizi">福利</string>
+    <string name="simple_activity_transition">transition_meizi</string>
 </resources>

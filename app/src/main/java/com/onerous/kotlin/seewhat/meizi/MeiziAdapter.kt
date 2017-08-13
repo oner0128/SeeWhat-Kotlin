@@ -1,5 +1,7 @@
 package com.onerous.kotlin.seewhat.meizi
 
+import android.os.Build
+import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
@@ -21,6 +23,9 @@ class MeiziAdapter(layoutResId: Int, data: MutableList<MeiziBean.Results>?) : Ba
                 .override(App.imageSize[0], App.imageSize[1])
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
-                .into(helper.getView(R.id.imageView))
+                .into(helper.getView(R.id.iv_item_meizi))
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            helper.getView<ImageView>(R.id.iv_item_meizi).transitionName=item._id
+//        }
     }
 }
