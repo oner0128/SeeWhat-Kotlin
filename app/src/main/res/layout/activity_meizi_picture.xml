@@ -4,11 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical">
-
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_meizi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
         android:fitsSystemWindows="true" />
 </LinearLayout>

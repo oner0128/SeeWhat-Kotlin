@@ -46,4 +46,5 @@ ext {
     sqlbriteVersion = '2.0.0'
     retrofitVersion='2.3.0'
     glideVersion='3.7.0'
+    PhotoViewVersion='2.1.3'
 }
