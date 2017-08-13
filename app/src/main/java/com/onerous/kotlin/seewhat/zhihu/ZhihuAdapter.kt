@@ -71,7 +71,7 @@ class ZhihuAdapter(data: MutableList<ZhihuMultiItem>?) : BaseMultiItemQuickAdapt
 
                 if (storiesEntity.images != null) {
                     Glide.with(mContext).load(storiesEntity.images.first()).into(helper.getView(R.id.story_iv))
-                    helper.setVisible(R.id.multi_pic_iv, storiesEntity.images.size > 1)
+                    helper.setVisible(R.id.multi_pic_iv, storiesEntity.images.size > 0)
                     helper.setVisible(R.id.story_frame_iv, true)
                 } else helper.setVisible(R.id.story_frame_iv, false)
             }
@@ -84,7 +84,7 @@ class ZhihuAdapter(data: MutableList<ZhihuMultiItem>?) : BaseMultiItemQuickAdapt
                     val stroyImg: ImageView = helper.getView(R.id.story_iv)
                     //Glide.with(helper.getConvertView().getContext()).load(storiesEntity.getImages().get(0)).into(stroyImg);
                     Glide.with(mContext).load(storiesEntity.images.first()).into(stroyImg)
-                    helper.setVisible(R.id.multi_pic_iv, storiesEntity.images.size > 1)
+                    helper.setVisible(R.id.multi_pic_iv, storiesEntity.images.size > 0)
                     helper.setVisible(R.id.story_frame_iv, true)
                 } else helper.setVisible(R.id.story_frame_iv, false)
             }
