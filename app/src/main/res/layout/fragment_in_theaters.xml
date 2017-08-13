@@ -34,7 +34,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_caution_64dp" />
+                app:srcCompat="@drawable/ic_caution_64dp" />
 
             <TextView
                 android:id="@+id/tv_intheater_error"

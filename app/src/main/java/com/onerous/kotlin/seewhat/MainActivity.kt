@@ -1,25 +1,24 @@
 package com.onerous.kotlin.seewhat
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import com.onerous.kotlin.seewhat.detailActivity.SearchActivity
 import com.onerous.kotlin.seewhat.inTheaters.InTheatersFragment
 import com.onerous.kotlin.seewhat.inTheaters.Top250Fragment
+import com.onerous.kotlin.seewhat.meizi.MeiziFragment
 import com.onerous.kotlin.seewhat.zhihu.ZhihuFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val mInTheaterFragment: InTheatersFragment? by lazy { InTheatersFragment.NewInstance() }
-    private val mZhihuFragment: ZhihuFragment?  by lazy { ZhihuFragment.NewInstance() }
-    private val mTop250Fragment: Top250Fragment?  by lazy { Top250Fragment.NewInstance() }
+    private val mInTheaterFragment: InTheatersFragment by lazy { InTheatersFragment() }
+    private val mZhihuFragment: ZhihuFragment  by lazy { ZhihuFragment() }
+    private val mTop250Fragment: Top250Fragment  by lazy { Top250Fragment() }
+    private val mMeiziFragment: MeiziFragment  by lazy { MeiziFragment() }
     private var currentFragment: Fragment? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -37,6 +36,11 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_zhihu -> {
                 supportActionBar?.setTitle(R.string.toolbar_title_zhihu)
                 addorShowFragmentToActivity(supportFragmentManager, R.id.container, mZhihuFragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_meizi -> {
+                supportActionBar?.setTitle(getString(R.string.toolbar_title_meizi))
+                addorShowFragmentToActivity(supportFragmentManager, R.id.container, mMeiziFragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -59,23 +63,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, SearchActivity::class.java)
             startActivity(intent)
         }
-    }
-
-
-    fun hideFabToTop(view: View) {
-
-        val animator = view.animate()
-                .translationY(view.height.toFloat() + view.bottom.toFloat())
-                .setDuration(500)
-
-        animator.setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                com.orhanobut.logger.Logger.v("animator end")
-                view.visibility = View.INVISIBLE
-            }
-        })
-
-        animator.start()
     }
 
     fun addorShowFragmentToActivity(fragmentManager: FragmentManager,

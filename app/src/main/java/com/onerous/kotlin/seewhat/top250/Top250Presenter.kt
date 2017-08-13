@@ -28,13 +28,15 @@ class Top250Presenter(val view: Top250Contract.View) : Top250Contract.Presenter 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { it ->
-                            Logger.v("loadTop250Movies-size:${it.size}-start:$start")
+//                            Logger.v("loadTop250Movies-size:${it.size}-start:$start")
                             if (start == 0) view.showMovies(it)
                             else view.showMoreMovies(it)
                         }
-                        , { error -> Logger.v("loadTop250Movies:error-${error.toString()}")
+                        , { error -> 
+//                    Logger.v("loadTop250Movies:error-${error.toString()}")
                     view.showError(error.toString()) }
-                        , { Logger.v("loadTop250Movies:complete")
+                        , { 
+//                    Logger.v("loadTop250Movies:complete")
                     view.hideProgressDialog() })
 
         mCompositeDisposable.add(disposable)

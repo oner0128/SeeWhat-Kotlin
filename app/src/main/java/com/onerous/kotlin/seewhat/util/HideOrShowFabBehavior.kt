@@ -5,18 +5,20 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AnticipateInterpolator
 
 /**
  * Created by oner0128 on 2017/8/12.
  */
 class HideOrShowFabBehavior(context: Context?, attrs: AttributeSet?) : HideOrShowBehavior(context, attrs), HideOrShowListener {
     var mAnimatorState = HideOrShowState.SHOW
+    val mInterpolator=AnticipateInterpolator()
     override fun hide(view: View) {
 
         val animator = view.animate()
                 .translationY(view.height.toFloat() + view.bottom.toFloat())
-//                .setInterpolator(mInterpolator)
-                .setDuration(800)
+                .setInterpolator(mInterpolator)
+                .setDuration(1000)
 
         animator.setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
@@ -32,8 +34,8 @@ class HideOrShowFabBehavior(context: Context?, attrs: AttributeSet?) : HideOrSho
 
         val animator = view.animate()
                 .translationY(0f)
-//                .setInterpolator(mInterpolator)
-                .setDuration(800)
+                .setInterpolator(mInterpolator)
+                .setDuration(1000)
 
         animator.setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator?) {

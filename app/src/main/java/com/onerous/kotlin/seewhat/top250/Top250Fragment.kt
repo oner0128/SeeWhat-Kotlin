@@ -33,14 +33,6 @@ class Top250Fragment : Fragment(), Top250Contract.View {
     private lateinit var mAdapter: Top250Adapter
     private lateinit var mPresenter: Top250Contract.Presenter
 
-    private object SingletonHolder {
-        var Instance:Top250Fragment? = Top250Fragment()
-    }
-
-    companion object {
-        fun NewInstance(): Top250Fragment? = SingletonHolder.Instance
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_top250, container, false);
     }
@@ -58,7 +50,6 @@ class Top250Fragment : Fragment(), Top250Contract.View {
     override fun onDestroy() {
         super.onDestroy()
         mPresenter.unsubscribe()
-        SingletonHolder.Instance=null
     }
 
     override fun showMovies(movies: List<MoviesBean.Subjects>) {

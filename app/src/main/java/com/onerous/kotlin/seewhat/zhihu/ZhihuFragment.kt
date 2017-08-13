@@ -24,17 +24,8 @@ class ZhihuFragment : Fragment(), ZhihuContract.View {
         recyclerView_zhihu.smoothScrollToPosition(0)
     }
 
-    private object SingletonHolder {
-        var Instance : ZhihuFragment?= ZhihuFragment()
-    }
-
-    companion object {
-        fun NewInstance(): ZhihuFragment? = SingletonHolder.Instance
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        SingletonHolder.Instance=null
     }
     private var mPresenter: ZhihuContract.Presenter = ZhihuPresenter(this)
     private var mDatas = ArrayList<ZhihuMultiItem>()

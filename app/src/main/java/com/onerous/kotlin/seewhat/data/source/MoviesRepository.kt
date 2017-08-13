@@ -53,16 +53,15 @@ class MoviesRepository private constructor(context: Context) {
             }
             var remoteMovies = getAndSaveRemoteMovies()
             if (mCacheIsDirty) {
-                Logger.v("from Remote")
+//                Logger.v("from Remote")
                 return remoteMovies
             } else {
-                // Query the local storage if available. If not, query the network.
-                Logger.v("from Local")
+//                // Query the local storage if available. If not, query the network.
+//                Logger.v("from Local")
                 var localMovies = getAndCacheLocalMovies()
 //                return localMovies
                 return Observable.concat(localMovies,remoteMovies)
-                        .filter { movies -> Logger.v("${movies.size}")
-                            movies.isNotEmpty() }
+                        .filter { movies -> movies.isNotEmpty() }
                         .take(1)
 
             }

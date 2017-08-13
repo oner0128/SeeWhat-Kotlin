@@ -23,14 +23,6 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
         recyclerView_intheaters.smoothScrollToPosition(0)
     }
 
-    private object SingletonHolder {
-        var Instance :InTheatersFragment?= InTheatersFragment()
-    }
-    
-    companion object {
-        fun NewInstance(): InTheatersFragment? = SingletonHolder.Instance
-    }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
@@ -92,7 +84,6 @@ class InTheatersFragment : Fragment(), InTheatersContract.View {
     override fun onDestroy() {
         super.onDestroy()
         mPresenter.unsubscribe()
-        SingletonHolder.Instance=null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
