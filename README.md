@@ -10,8 +10,9 @@ You can use it to read Douban intheaters, Douban Top250 && Zhihu Daily, and lear
 Welcome to Star or Fork！
 
 ## Screenshots
-<img src="https://user-images.githubusercontent.com/7570947/28606253-a2634786-7208-11e7-956c-27d4642b593f.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606254-a26669b6-7208-11e7-8394-ef26c95e7b47.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606252-a263001e-7208-11e7-8ec3-5a59e31a591c.png" width="250" height="444"/>
-<img src="https://user-images.githubusercontent.com/7570947/28606256-a272acf8-7208-11e7-8d69-bc7f5d22a85f.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606255-a26bf304-7208-11e7-820a-431e191f30c8.png" width="250" height="444"/> <img src="https://user-images.githubusercontent.com/7570947/28606257-a273604e-7208-11e7-866e-79794ffc1bc5.png" width="250" height="444"/>
+<img src="https://user-images.githubusercontent.com/7570947/29250229-44525ff2-8071-11e7-9525-de8c5d2b7184.png" width="500" height="888"/> <img src="https://user-images.githubusercontent.com/7570947/29250230-445310c8-8071-11e7-8204-f8b31c8a6c8d.png" width="500" height="888"/> 
+<img src="https://user-images.githubusercontent.com/7570947/29250231-4454d6b0-8071-11e7-9a14-9749fbfeaf35.png" width="500" height="888"/><img src="https://user-images.githubusercontent.com/7570947/29250233-44553330-8071-11e7-9707-efe3b8c5e9ba.png" width="500" height="888"/> 
+<img src="https://user-images.githubusercontent.com/7570947/29250232-44550342-8071-11e7-984d-5cb4938ade3e.png" width="500" height="888"/> <img src="https://user-images.githubusercontent.com/7570947/29250234-44557e4e-8071-11e7-8ab8-d76cd7c7f946.png" width="500" height="888"/>
 
 ## Thanks
 Thanks to these projects and libraries:
@@ -30,10 +31,9 @@ Thanks to these projects and libraries:
 - [sqlbrite](https://github.com/square/sqlbrite)
 - [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 - [logger](https://github.com/orhanobut/logger)
-- [ByeBurger](https://github.com/githubwing/ByeBurger)
 
 ## Statement
-本开源项目数据来自于豆瓣API和知乎日报API，一切数据解释权都归豆瓣和知乎所有。
+本开源项目数据来自于豆瓣API、知乎日报API和Gank API，一切数据解释权都归豆瓣、知乎和Gank所有。
 此开源项目仅供学习交流用途。如有侵犯版权问题，可通知本人及时删除
 
 ## End
