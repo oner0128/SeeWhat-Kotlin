@@ -5,6 +5,8 @@ This sample is written by [Kotlin](https://github.com/JetBrains/kotlin) , built 
 
 This sample is based on [Android-architecture todo-mvp-rxjava](https://github.com/googlesamples/android-architecture/tree/todo-mvp-rxjava),and also uses RxJava for communication between the data model and presenter layers .
 
+![todo-mvp-rxjava](https://user-images.githubusercontent.com/7570947/29265792-eb3a7f9a-8114-11e7-8c07-f88578a62f88.png)
+
 You can use it to read Douban intheaters, Douban Top250 && Zhihu Daily, and learn it From Java To Kotlin.
  
 Welcome to Star or Fork！
@@ -30,9 +32,9 @@ Thanks to these projects and libraries:
 - [Retrofit 2](http://square.github.io/retrofit/) / [OkHttp](http://square.github.io/okhttp/)
 - [Gson](https://github.com/google/gson)
 - [Glide 3](https://github.com/bumptech/glide)
-- [sqlbrite](https://github.com/square/sqlbrite)
+- [SQLBrite](https://github.com/square/sqlbrite)
 - [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
-- [logger](https://github.com/orhanobut/logger)
+- [Logger](https://github.com/orhanobut/logger)
 - [Leakcanary](https://github.com/square/leakcanary)
 
 ## Statement
