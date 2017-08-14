@@ -23,6 +23,8 @@ Thanks to these projects and libraries:
 
 [ZhihuDaily Api](https://github.com/izzyleung/ZhihuDailyPurify/wiki/%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5-API-%E5%88%86%E6%9E%90)
 
+[Gank Api](https://gank.io)
+
 ### Libraries:
 - [RxJava 2](https://github.com/ReactiveX/RxJava) and [RxAndroid](https://github.com/ReactiveX/RxAndroid)
 - [Retrofit 2](http://square.github.io/retrofit/) / [OkHttp](http://square.github.io/okhttp/)
@@ -31,6 +33,7 @@ Thanks to these projects and libraries:
 - [sqlbrite](https://github.com/square/sqlbrite)
 - [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 - [logger](https://github.com/orhanobut/logger)
+- [Leakcanary](https://github.com/square/leakcanary)
 
 ## Statement
 本开源项目数据来自于豆瓣API、知乎日报API和Gank API，一切数据解释权都归豆瓣、知乎和Gank所有。
